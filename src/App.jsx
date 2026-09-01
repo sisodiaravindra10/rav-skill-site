@@ -270,7 +270,10 @@ function MoveExplorer() {
             ref={paneRef}
             className="relative h-52 min-w-0 select-none overflow-hidden rounded-xl border border-white/10 bg-black/40 sm:h-56"
           >
-            <div className="absolute inset-0 flex items-center px-6 py-10 sm:px-8">
+            <div
+              className="absolute inset-y-0 left-0 flex items-center py-10 pl-6 pr-4 sm:pl-8"
+              style={{ width: `${split}%` }}
+            >
               <code
                 key={m.verb + "-b"}
                 className="move-face w-full break-words font-mono text-xs leading-relaxed text-white/45 line-through decoration-white/25 sm:text-sm"
@@ -279,15 +282,15 @@ function MoveExplorer() {
               </code>
             </div>
             <div
-              className="absolute inset-0 bg-ink"
-              style={{ clipPath: `inset(0 0 0 ${split}%)` }}
-              aria-hidden="true"
+              className="absolute inset-y-0 right-0 flex items-center border-l border-white/5 bg-ink py-10 pl-5 pr-6 sm:pr-8"
+              style={{ width: `${100 - split}%` }}
             >
-              <div className="flex h-full items-center px-6 py-10 sm:px-8">
-                <code className="w-full break-words font-mono text-xs leading-relaxed text-white/90 sm:text-sm">
-                  {m.after}
-                </code>
-              </div>
+              <code
+                key={m.verb + "-a"}
+                className="move-face w-full break-words font-mono text-xs leading-relaxed text-white/90 sm:text-sm"
+              >
+                {m.after}
+              </code>
             </div>
 
             <div
