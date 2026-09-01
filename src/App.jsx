@@ -243,7 +243,7 @@ function MoveExplorer() {
         })}
       </div>
 
-      <div className="grid min-w-0 gap-10 md:grid-cols-[minmax(0,15rem)_minmax(0,1fr)] md:gap-12">
+      <div className="grid min-w-0 gap-10 md:grid-cols-[minmax(0,17rem)_minmax(0,1fr)] md:gap-12">
         {/* the detail, keyed so it re-enters on change */}
         <div key={m.verb} className="move-detail min-w-0">
           <p className="font-mono text-xs uppercase tracking-[0.16em] text-white/45">{m.group}</p>
@@ -270,10 +270,10 @@ function MoveExplorer() {
             ref={paneRef}
             className="relative h-52 min-w-0 select-none overflow-hidden rounded-xl border border-white/10 bg-black/40 sm:h-56"
           >
-            <div className="absolute inset-0 grid place-items-center p-6 sm:p-8">
+            <div className="absolute inset-0 flex items-center px-6 py-10 sm:px-8">
               <code
                 key={m.verb + "-b"}
-                className="move-face w-full break-words text-center font-mono text-xs leading-relaxed text-white/45 line-through decoration-white/25 sm:text-sm"
+                className="move-face w-full break-words font-mono text-xs leading-relaxed text-white/45 line-through decoration-white/25 sm:text-sm"
               >
                 {m.before}
               </code>
@@ -283,8 +283,8 @@ function MoveExplorer() {
               style={{ clipPath: `inset(0 0 0 ${split}%)` }}
               aria-hidden="true"
             >
-              <div className="grid h-full place-items-center p-6 sm:p-8">
-                <code className="w-full break-words text-center font-mono text-xs leading-relaxed text-white/90 sm:text-sm">
+              <div className="flex h-full items-center px-6 py-10 sm:px-8">
+                <code className="w-full break-words font-mono text-xs leading-relaxed text-white/90 sm:text-sm">
                   {m.after}
                 </code>
               </div>
@@ -347,7 +347,7 @@ function InstallLine({ className = "" }) {
   };
   return (
     <div
-      className={`flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-lg border border-white/15 bg-black/50 py-2 pl-4 pr-2 backdrop-blur-sm sm:w-auto ${className}`}
+      className={`flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-lg border border-white/15 bg-black/50 py-2 pl-4 pr-2 backdrop-blur-sm sm:w-fit ${className}`}
     >
       <code
         tabIndex={0}
