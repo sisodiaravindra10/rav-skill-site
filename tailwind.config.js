@@ -8,9 +8,12 @@ export default {
       },
       colors: {
         // The page's three real colours. Everything else is white at an alpha.
-        ink: "var(--ink)",
-        accent: "var(--accent)",
-        scrim: "var(--scrim)",
+        // Literal, because a var() here makes Tailwind emit no utility at all.
+        // Keep in sync with the :root block in src/index.css, which the
+        // hand-written rules use.
+        ink: "#0b0b0c",
+        accent: "#f58549",
+        scrim: "#040a10",
       },
     },
   },

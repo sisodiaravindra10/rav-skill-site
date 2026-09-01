@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Check, Copy, Menu, X } from "lucide-react";
+import { ArrowRight, Check, Copy, Menu, MoveHorizontal, X } from "lucide-react";
 
 const REPO = "https://github.com/sisodiaravindra10/rav-skill";
 
@@ -48,42 +48,77 @@ const CAUGHT = [
   },
 ];
 
-// The skill's actual interface: sixteen scoped verbs, grouped by what they do.
+// The skill's actual interface. Each pair is a short illustrative example of the
+// transformation, not a claim about any product. `optimize` uses this page's own
+// real numbers.
 const MOVES = [
-  {
-    group: "refine",
-    items: [
-      ["polish", "final pass before shipping"],
-      ["bolder", "raise a section to the conviction the rest implies"],
-      ["quieter", "reduce intensity, keep the point of view"],
-      ["distill", "strip what does not earn its place"],
-      ["harden", "long text, i18n, RTL, errors, offline"],
-      ["onboard", "first run, empty states, activation"],
-    ],
-  },
-  {
-    group: "enhance",
-    items: [
-      ["animate", "motion with a stated thesis"],
-      ["colorize", "colour as hierarchy and meaning"],
-      ["typeset", "hierarchy, scale, measure, delivery"],
-      ["layout", "structure, grouping, rhythm, density"],
-      ["delight", "one earned moment of character"],
-      ["overdrive", "past conventional limits, on your pick"],
-    ],
-  },
-  {
-    group: "fix",
-    items: [
-      ["clarify", "UX copy, labels, errors"],
-      ["adapt", "one device or breakpoint class"],
-      ["optimize", "diagnose and fix UI performance"],
-    ],
-  },
-  {
-    group: "evaluate",
-    items: [["review-motion", "critique motion that already ships"]],
-  },
+  { verb: "polish", group: "refine", gloss: "final pass before shipping",
+    combines: ["harden", "clarify"],
+    before: "button: default", after: "button: default, hover, focus, active, disabled, loading, error",
+    caption: "Half a component becomes a whole one" },
+  { verb: "bolder", group: "refine", gloss: "raise a section to the conviction the rest implies",
+    combines: ["typeset", "layout"],
+    before: "text-2xl font-normal text-white/70", after: "text-6xl font-medium tracking-tight text-white",
+    caption: "One section rises to meet its neighbours" },
+  { verb: "quieter", group: "refine", gloss: "reduce intensity, keep the point of view",
+    combines: ["colorize", "distill"],
+    before: "bg-red-500 text-white shadow-xl animate-pulse", after: "bg-red-500/12 text-red-200 border border-red-500/25",
+    caption: "Intensity drops, the point of view survives" },
+  { verb: "distill", group: "refine", gloss: "strip what does not earn its place",
+    combines: ["clarify", "layout"],
+    before: "6 CTAs, 3 cards, 2 modals", after: "1 primary action, 2 supporting",
+    caption: "Fewer obstacles, the same capability" },
+  { verb: "harden", group: "refine", gloss: "long text, i18n, RTL, errors, offline",
+    combines: ["adapt", "clarify"],
+    before: '<div class="w-24">{name}</div>', after: '<div class="min-w-0 px-4">{name}</div>',
+    caption: "Survives a 40-character name and an RTL locale" },
+  { verb: "onboard", group: "refine", gloss: "first run, empty states, activation",
+    combines: ["clarify", "delight"],
+    before: "No data", after: "No cases yet. Submit your first, or browse the archive.",
+    caption: "An empty state that teaches the interface" },
+
+  { verb: "animate", group: "enhance", gloss: "motion with a stated thesis",
+    combines: ["delight", "optimize"],
+    before: "transition: all 0.3s ease-in-out", after: "transform 240ms cubic-bezier(0.16, 1, 0.3, 1)",
+    caption: "A curve with a reason, on a property that is cheap" },
+  { verb: "colorize", group: "enhance", gloss: "colour as hierarchy and meaning",
+    combines: ["typeset", "quieter"],
+    before: "text-gray-500 on everything", after: "accent owns action, muted owns metadata",
+    caption: "Colour starts encoding state instead of decorating" },
+  { verb: "typeset", group: "enhance", gloss: "hierarchy, scale, measure, delivery",
+    combines: ["layout", "bolder"],
+    before: "text-lg / text-base / text-sm", after: "display clamp, 65ch measure, tabular numerals",
+    caption: "Roles become distinguishable without reading the copy" },
+  { verb: "layout", group: "enhance", gloss: "structure, grouping, rhythm, density",
+    combines: ["distill", "adapt"],
+    before: "gap-4 on everything", after: "tight groups, generous separation",
+    caption: "Proximity does the grouping, not boxes" },
+  { verb: "delight", group: "enhance", gloss: "one earned moment of character",
+    combines: ["animate", "clarify"],
+    before: 'alert("Done")', after: "the icon swaps to a check for 1.8s",
+    caption: "One moment, at a point that earned it" },
+  { verb: "overdrive", group: "enhance", gloss: "past conventional limits, on your pick",
+    combines: ["optimize", "animate"],
+    before: "100,000 rows in the DOM", after: "virtualised, 60fps, keyboard-navigable",
+    caption: "Past what a visitor expected a page could do" },
+
+  { verb: "clarify", group: "fix", gloss: "UX copy, labels, errors",
+    combines: ["polish", "onboard"],
+    before: "Error 422: unprocessable entity", after: "That date is in the past. Pick a later one.",
+    caption: "The message names the problem and the recovery" },
+  { verb: "adapt", group: "fix", gloss: "one device or breakpoint class",
+    combines: ["layout", "harden"],
+    before: "grid-cols-4", after: "grid-cols-1 at 375, focus order intact",
+    caption: "Structure reflows, reading order survives" },
+  { verb: "optimize", group: "fix", gloss: "diagnose and fix UI performance",
+    combines: ["animate", "adapt"],
+    before: "7.3MB autoplay hero", after: "677KB plus a 40KB poster",
+    caption: "The real numbers from this page's own hero" },
+
+  { verb: "review-motion", group: "evaluate", gloss: "critique motion that already ships",
+    combines: ["animate", "optimize"],
+    before: "12 animated moments", after: "1 authored moment, 11 cut",
+    caption: "Motion judged against a craft bar, not vibes" },
 ];
 
 function Nav({ mobileMenuOpen, setMobileMenuOpen }) {
@@ -141,7 +176,165 @@ function Nav({ mobileMenuOpen, setMobileMenuOpen }) {
   );
 }
 
-function InstallLine() {
+function MoveExplorer() {
+  const [active, setActive] = useState(0);
+  const [split, setSplit] = useState(52);
+  const railRef = useRef(null);
+  const paneRef = useRef(null);
+  const dragging = useRef(false);
+  const m = MOVES[active];
+
+  // Arrow keys walk the rail, so the whole thing works without a pointer.
+  const onRailKey = (e) => {
+    const d = e.key === "ArrowDown" ? 1 : e.key === "ArrowUp" ? -1 : 0;
+    if (!d) return;
+    e.preventDefault();
+    const next = (active + d + MOVES.length) % MOVES.length;
+    setActive(next);
+    const el = railRef.current?.querySelectorAll("[role=option]")[next];
+    el?.focus();
+  };
+
+  const setFromPointer = (clientX) => {
+    const r = paneRef.current?.getBoundingClientRect();
+    if (!r) return;
+    setSplit(Math.min(92, Math.max(8, ((clientX - r.left) / r.width) * 100)));
+  };
+
+  useEffect(() => {
+    const move = (e) => dragging.current && setFromPointer(e.clientX ?? e.touches?.[0]?.clientX);
+    const up = () => (dragging.current = false);
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+    return () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+    };
+  }, []);
+
+  return (
+    <div className="grid gap-10 lg:grid-cols-[minmax(0,11rem)_minmax(0,1fr)] lg:gap-14">
+      {/* the rail: focus resolves by distance from the selection */}
+      <div
+        ref={railRef}
+        role="listbox"
+        aria-label="Moves"
+        tabIndex={-1}
+        onKeyDown={onRailKey}
+        className="move-rail flex gap-x-5 gap-y-1 overflow-x-auto pb-2 lg:block lg:overflow-visible lg:pb-0"
+      >
+        {MOVES.map((mv, i) => {
+          const d = Math.abs(i - active);
+          const on = i === active;
+          return (
+            <button
+              key={mv.verb}
+              role="option"
+              aria-selected={on}
+              onClick={() => setActive(i)}
+              style={{ "--d": d }}
+              className={`move-rail__item flex min-h-[44px] shrink-0 items-center whitespace-nowrap text-left font-mono transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] lg:block lg:min-h-0 lg:w-full lg:py-1 ${
+                on ? "text-accent" : "text-white/85 hover:text-white"
+              }`}
+            >
+              {mv.verb}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="grid min-w-0 gap-10 md:grid-cols-[minmax(0,15rem)_minmax(0,1fr)] md:gap-12">
+        {/* the detail, keyed so it re-enters on change */}
+        <div key={m.verb} className="move-detail min-w-0">
+          <p className="font-mono text-xs uppercase tracking-[0.16em] text-white/45">{m.group}</p>
+          <p className="mt-4 font-mono text-sm text-white/45">/rav</p>
+          <h3 className="font-mono text-3xl leading-none text-accent md:text-4xl">{m.verb}</h3>
+          <p className="mt-4 text-sm leading-relaxed text-white/60">{m.gloss}</p>
+          <p className="mt-5 flex flex-wrap items-center gap-2 text-xs text-white/45">
+            <span>combines with</span>
+            {m.combines.map((c) => (
+              <button
+                key={c}
+                onClick={() => setActive(MOVES.findIndex((x) => x.verb === c))}
+                className="relative rounded border border-white/12 bg-white/[0.04] px-2 py-1 font-mono text-accent/80 transition-colors before:absolute before:-inset-y-2 before:-inset-x-1 before:content-[''] hover:border-white/25 hover:text-accent"
+              >
+                /{c}
+              </button>
+            ))}
+          </p>
+        </div>
+
+        {/* the split: before underneath, after revealed by the divider */}
+        <div className="min-w-0">
+          <div
+            ref={paneRef}
+            className="relative h-52 min-w-0 select-none overflow-hidden rounded-xl border border-white/10 bg-black/40 sm:h-56"
+          >
+            <div className="absolute inset-0 grid place-items-center p-6 sm:p-8">
+              <code
+                key={m.verb + "-b"}
+                className="move-face w-full break-words text-center font-mono text-xs leading-relaxed text-white/45 line-through decoration-white/25 sm:text-sm"
+              >
+                {m.before}
+              </code>
+            </div>
+            <div
+              className="absolute inset-0 bg-ink"
+              style={{ clipPath: `inset(0 0 0 ${split}%)` }}
+              aria-hidden="true"
+            >
+              <div className="grid h-full place-items-center p-6 sm:p-8">
+                <code className="w-full break-words text-center font-mono text-xs leading-relaxed text-white/90 sm:text-sm">
+                  {m.after}
+                </code>
+              </div>
+            </div>
+
+            <div
+              className="absolute inset-y-0 w-px bg-accent"
+              style={{ left: `${split}%` }}
+              aria-hidden="true"
+            />
+            <div
+              role="slider"
+              tabIndex={0}
+              aria-label="Reveal the result"
+              aria-valuemin={8}
+              aria-valuemax={92}
+              aria-valuenow={Math.round(split)}
+              onPointerDown={(e) => {
+                dragging.current = true;
+                setFromPointer(e.clientX);
+              }}
+              onKeyDown={(e) => {
+                const d = e.key === "ArrowRight" ? 4 : e.key === "ArrowLeft" ? -4 : 0;
+                if (!d) return;
+                e.preventDefault();
+                setSplit((v) => Math.min(92, Math.max(8, v + d)));
+              }}
+              style={{ left: `${split}%` }}
+              className="absolute top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize items-center justify-center rounded-full border border-accent/60 bg-ink text-accent"
+            >
+              <MoveHorizontal size={15} />
+            </div>
+
+            <span className="pointer-events-none absolute left-3 top-3 font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
+              was
+            </span>
+            <span className="pointer-events-none absolute right-3 top-3 font-mono text-[10px] uppercase tracking-[0.16em] text-accent/70">
+              now
+            </span>
+          </div>
+          <p key={m.verb + "-c"} className="move-detail mt-4 text-center text-xs text-white/50">
+            {m.caption}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function InstallLine({ className = "" }) {
   const [copied, setCopied] = useState(false);
   const copy = async () => {
     try {
@@ -153,7 +346,9 @@ function InstallLine() {
     }
   };
   return (
-    <div className="flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-lg border border-white/15 bg-black/50 py-2 pl-4 pr-2 sm:w-auto">
+    <div
+      className={`flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-lg border border-white/15 bg-black/50 py-2 pl-4 pr-2 backdrop-blur-sm sm:w-auto ${className}`}
+    >
       <code
         tabIndex={0}
         role="region"
@@ -211,7 +406,7 @@ export default function App() {
   return (
     <div id="top" className="w-full bg-ink font-geist">
       {/* Fold 1: the film */}
-      <section className="h-viewport relative w-full overflow-hidden">
+      <section className="h-viewport relative flex w-full flex-col overflow-hidden">
         <video
           ref={videoRef}
           className="absolute inset-0 h-full w-full object-cover [object-position:70%_center]"
@@ -269,7 +464,7 @@ export default function App() {
 
         <main
           {...(mobileMenuOpen ? { inert: "" } : {})}
-          className="h-viewport-below-nav relative z-10 flex flex-col justify-between px-6 pb-10 pt-12 sm:pb-12 sm:pt-16 md:px-12 md:pb-16 md:pt-20 lg:px-16">
+          className="relative z-10 flex min-h-0 flex-1 flex-col justify-between px-6 pb-10 pt-12 sm:pb-12 sm:pt-16 md:px-12 md:pb-16 md:pt-20 lg:px-16">
           <div className="max-w-3xl">
             <p className="hero-reveal mb-4 animate-[fadeSlideUp_0.8s_ease_0.2s_both] text-xs text-white/90 sm:mb-6 sm:text-sm">
               A personal design skill for Claude Code
@@ -288,13 +483,7 @@ export default function App() {
               Three registers, sixteen scoped moves, and sixty-one production tells that
               run as the last filter before anything ships.
             </p>
-            <a
-              href="#catches"
-              className="hero-reveal inline-flex min-h-[44px] animate-[fadeSlideUp_0.8s_ease_0.9s_both] items-center gap-2 rounded-lg bg-white px-5 py-2.5 text-sm font-medium text-black transition-transform hover:scale-105 sm:px-6 sm:py-3"
-            >
-              See what it caught
-              <ArrowRight size={16} />
-            </a>
+            <InstallLine className="hero-reveal animate-[fadeSlideUp_0.8s_ease_0.9s_both]" />
           </div>
         </main>
       </section>
@@ -380,22 +569,8 @@ export default function App() {
             <span className="text-accent">$</span> /rav quieter the pricing table
           </p>
 
-          <div className="mt-12 grid gap-x-10 gap-y-10 border-t border-white/10 pt-10 sm:grid-cols-2 lg:grid-cols-4">
-            {MOVES.map((g) => (
-              <div key={g.group}>
-                <h3 className="font-mono text-xs uppercase tracking-[0.14em] text-white/45">
-                  {g.group}
-                </h3>
-                <dl className="mt-5 space-y-4">
-                  {g.items.map(([verb, gloss]) => (
-                    <div key={verb}>
-                      <dt className="font-mono text-sm text-accent">{verb}</dt>
-                      <dd className="mt-1 text-sm leading-snug text-white/60">{gloss}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </div>
-            ))}
+          <div className="mt-12 border-t border-white/10 pt-10">
+            <MoveExplorer />
           </div>
 
           <div className="mt-14 flex flex-col items-start gap-4 border-t border-white/10 pt-10 sm:flex-row sm:items-center sm:justify-between">
