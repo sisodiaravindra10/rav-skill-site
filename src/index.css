@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* The palette lives here once. Tailwind's colour tokens point at these, so a
+   utility and a hand-written rule can never drift apart. */
+:root {
+  --ink: #0b0b0c;
+  --accent: #f58549;
+  --scrim: #040a10;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer components {
+  /* One rule with a fallback, rather than two competing Tailwind height
+     utilities whose winner depends on generated order rather than authoring
+     order. Old engines get vh, everything current gets dvh. */
+  .h-viewport {
+    height: 100vh;
+    height: 100dvh;
+  }
+  .h-viewport-below-nav {
+    height: calc(100vh - 80px);
+    height: calc(100dvh - 80px);
+  }
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Surfaces the browser draws for us still belong to the design. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+::selection {
+  background: var(--accent);
+  color: var(--ink);
+}
+html {
+  scrollbar-color: rgba(255, 255, 255, 0.22) var(--ink);
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--ink);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Reduced motion drops the decorative reveal and stops the loop. It does not
+   blanket-kill every animation and transition: hover, focus and the menu still
+   need to read as state changes, just faster. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-reveal {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  [class*="duration-500"],
+  [class*="duration-300"] {
+    transition-duration: 140ms;
+  }
+}
