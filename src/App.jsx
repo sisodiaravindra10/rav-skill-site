@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check, Copy, Menu, MoveHorizontal, X } from "lucide-react";
+import { SPECIMENS } from "./specimens.jsx";
 
 const REPO = "https://github.com/sisodiaravindra10/rav-skill";
 
@@ -268,29 +269,21 @@ function MoveExplorer() {
         <div className="min-w-0">
           <div
             ref={paneRef}
-            className="relative h-52 min-w-0 select-none overflow-hidden rounded-xl border border-white/10 bg-black/40 sm:h-56"
+            className="relative h-60 min-w-0 select-none overflow-hidden rounded-xl border border-white/10 bg-black/40 sm:h-64"
           >
             <div
-              className="absolute inset-y-0 left-0 flex items-center py-10 pl-6 pr-4 sm:pl-8"
+              key={m.verb + "-b"}
+              className="move-face absolute inset-y-0 left-0 flex items-center justify-center overflow-hidden px-5 py-9 grayscale"
               style={{ width: `${split}%` }}
             >
-              <code
-                key={m.verb + "-b"}
-                className="move-face w-full break-words font-mono text-xs leading-relaxed text-white/45 line-through decoration-white/25 sm:text-sm"
-              >
-                {m.before}
-              </code>
+              {SPECIMENS[m.verb].was}
             </div>
             <div
-              className="absolute inset-y-0 right-0 flex items-center border-l border-white/5 bg-ink py-10 pl-5 pr-6 sm:pr-8"
+              key={m.verb + "-a"}
+              className="move-face absolute inset-y-0 right-0 flex items-center justify-center overflow-hidden border-l border-white/5 bg-ink px-5 py-9"
               style={{ width: `${100 - split}%` }}
             >
-              <code
-                key={m.verb + "-a"}
-                className="move-face w-full break-words font-mono text-xs leading-relaxed text-white/90 sm:text-sm"
-              >
-                {m.after}
-              </code>
+              {SPECIMENS[m.verb].now}
             </div>
 
             <div
@@ -321,10 +314,10 @@ function MoveExplorer() {
               <MoveHorizontal size={15} />
             </div>
 
-            <span className="pointer-events-none absolute left-3 top-3 font-mono text-[10px] uppercase tracking-[0.16em] text-white/35">
+            <span className="pointer-events-none absolute left-3 top-3 font-mono text-[10px] uppercase tracking-[0.16em] text-white/60">
               was
             </span>
-            <span className="pointer-events-none absolute right-3 top-3 font-mono text-[10px] uppercase tracking-[0.16em] text-accent/70">
+            <span className="pointer-events-none absolute right-3 top-3 font-mono text-[10px] uppercase tracking-[0.16em] text-accent">
               now
             </span>
           </div>
