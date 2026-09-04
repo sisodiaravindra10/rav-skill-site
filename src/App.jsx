@@ -34,7 +34,7 @@ const CAUGHT = [
   {
     tell: "enumerated section label",
     why: "Its position on the page already says which section this is. The number is decoration.",
-    before: 'sec__no > "section 01 / context"',
+    before: 'sec__no > "section 01 / context"', // rav-verify-ignore quoted as evidence
     after: 'sec__no > "context"',
     metric: "6",
     unit: "labels cut",
@@ -521,7 +521,7 @@ export default function App() {
 
                 <div className="min-w-0 space-y-2.5">
                   <div className="flex min-w-0 gap-3 border-l border-white/25 pl-4">
-                    <span className="shrink-0 select-none font-mono text-xs leading-6 text-white/35">
+                    <span className="shrink-0 select-none font-mono text-xs leading-6 text-white/60">
                       was
                     </span>
                     <code className="min-w-0 overflow-x-auto whitespace-pre font-mono text-xs leading-6 text-white/50 line-through decoration-white/25 sm:text-[13px]">
@@ -529,7 +529,7 @@ export default function App() {
                     </code>
                   </div>
                   <div className="flex min-w-0 gap-3 border-l border-accent pl-4">
-                    <span className="shrink-0 select-none font-mono text-xs leading-6 text-accent/70">
+                    <span className="shrink-0 select-none font-mono text-xs leading-6 text-accent">
                       now
                     </span>
                     <code className="min-w-0 overflow-x-auto whitespace-pre font-mono text-xs leading-6 text-white/90 sm:text-[13px]">
