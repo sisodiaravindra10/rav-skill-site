@@ -475,9 +475,11 @@ export default function App() {
           </div>
 
           <div>
+            {/* tell count: grep -c '^- ' reference/tells.md in the skill repo,
+                minus the 3 hex-value bullets under Palette bans. Recount on bump. */}
             <p className="hero-reveal mb-5 max-w-sm animate-[fadeSlideUp_0.8s_ease_0.7s_both] text-sm leading-relaxed text-white/60 sm:mb-6 sm:max-w-lg sm:text-base md:text-lg">
-              Three registers, sixteen scoped moves, and sixty-one production tells that
-              run as the last filter before anything ships.
+              Three registers, sixteen scoped moves, and sixty-three production tells
+              that run as the last filter before anything ships.
             </p>
             <InstallLine className="hero-reveal animate-[fadeSlideUp_0.8s_ease_0.9s_both]" />
           </div>
@@ -584,7 +586,7 @@ export default function App() {
 
       <footer className="border-t border-white/10 px-6 py-8 md:px-12 lg:px-16">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 text-xs text-white/55 sm:flex-row sm:items-center sm:justify-between">
-          <span>rav v2.0.0 . a personal design skill</span>
+          <span>rav v2.1.0 . a personal design skill</span>
           <span>Built with the skill it documents.</span>
         </div>
       </footer>
