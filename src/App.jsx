@@ -12,6 +12,22 @@ const NAV = [
 
 const INSTALL = "git clone https://github.com/sisodiaravindra10/rav-skill ~/.claude/skills/rav";
 
+// What changed between v2.1 and v3.2. Each line is a file or section in the skill repo.
+const WHATS_NEW = [
+  { title: "Conviction before compliance",
+    body: "The rules are a floor. Every persuasive page now states one idea a stranger would repeat before any rule is applied." },
+  { title: "A product-stage hero",
+    body: "The brand colour as a full field, the headline at real scale, and the real product shown large. The default for software pages." },
+  { title: "A checked font roster",
+    body: "Google Fonts sorted by the job each does, with Devanagari families, pairings and loading rules. Every name confirmed to load." },
+  { title: "A voice pass",
+    body: "Eighteen sentence shapes that mark copy as machine-written, each with its fix, run on every visible string." },
+  { title: "A micro-interaction floor",
+    body: "Press feedback, hover only where devices hover, popovers that grow from their trigger. Distilled from Emil Kowalski's design engineering skill." },
+  { title: "A checker that reads more",
+    body: "The verify script now flags slop phrases, entrances from scale zero and ease-in, and reads OKLCH colours when it measures contrast." },
+];
+
 // Every pair below is a real edit from one audit in this repo's history, quoted
 // from the diff. Nothing here is illustrative.
 const CAUGHT = [
@@ -478,7 +494,7 @@ export default function App() {
             {/* tell count: grep -c '^- ' reference/tells.md in the skill repo,
                 minus the 3 hex-value bullets under Palette bans. Recount on bump. */}
             <p className="hero-reveal mb-5 max-w-sm animate-[fadeSlideUp_0.8s_ease_0.7s_both] text-sm leading-relaxed text-white/60 sm:mb-6 sm:max-w-lg sm:text-base md:text-lg">
-              Three registers, sixteen scoped moves, and sixty-three production tells
+              Three registers, sixteen scoped moves, and sixty-six production tells
               that run as the last filter before anything ships.
             </p>
             <InstallLine className="hero-reveal animate-[fadeSlideUp_0.8s_ease_0.9s_both]" />
@@ -571,6 +587,18 @@ export default function App() {
             <MoveExplorer />
           </div>
 
+          <div className="mt-14 border-t border-white/10 pt-10">
+            <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent">New in v3</p>
+            <ul className="mt-8 grid gap-x-12 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
+              {WHATS_NEW.map((n) => (
+                <li key={n.title}>
+                  <h3 className="text-base font-medium tracking-tight text-white">{n.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-white/60">{n.body}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           <div className="mt-14 flex flex-col items-start gap-4 border-t border-white/10 pt-10 sm:flex-row sm:items-center sm:justify-between">
             <InstallLine />
             <a
@@ -586,7 +614,7 @@ export default function App() {
 
       <footer className="border-t border-white/10 px-6 py-8 md:px-12 lg:px-16">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 text-xs text-white/55 sm:flex-row sm:items-center sm:justify-between">
-          <span>rav v2.1.0 . a personal design skill</span>
+          <span>rav v3.2.0 . a personal design skill</span>
           <span>Built with the skill it documents.</span>
         </div>
       </footer>
