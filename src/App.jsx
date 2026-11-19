@@ -12,12 +12,12 @@ const NAV = [
 
 const INSTALL = "git clone https://github.com/sisodiaravindra10/rav-skill ~/.claude/skills/rav";
 
-// What changed between v2.1 and v3.3. Each line is a file or section in the skill repo.
+// What changed between v2.1 and v3.5. Each line is a file or section in the skill repo.
 const WHATS_NEW = [
   { title: "Questions before pixels",
     body: "It reads the project first, then asks one short round about the goal, the audience and what is real before it designs anything." },
-  { title: "Conviction before compliance",
-    body: "The rules are a floor. Every persuasive page now states one idea a stranger would repeat before any rule is applied." },
+  { title: "His process, in his words",
+    body: "It starts from a place or a memory, shows more than one direction, and finishes the hero before anything else is built." },
   { title: "A product-stage hero",
     body: "The brand colour as a full field, the headline at real scale, and the real product shown large. The default for software pages." },
   { title: "A checked font roster",
@@ -614,7 +614,7 @@ export default function App() {
 
       <footer className="border-t border-white/10 px-6 py-8 md:px-12 lg:px-16">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 text-xs text-white/55 sm:flex-row sm:items-center sm:justify-between">
-          <span>rav v3.4.0 . a personal design skill</span>
+          <span>rav v3.5.0 . a personal design skill</span>
           <span>Built with the skill it documents.</span>
         </div>
       </footer>
