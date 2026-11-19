@@ -25,7 +25,7 @@ BUNDLE=$(printf '%s' "$PAGE" | grep -o '/assets/[^"]*\.js' | head -1)
 JS=$(curl -s -m 30 "$H$BUNDLE")
 grep -q '"catches"' <<<"$JS" && ok "fold 2 in the bundle" || no "fold 2 missing from the bundle"
 grep -q '"run"'     <<<"$JS" && ok "fold 3 in the bundle" || no "fold 3 missing from the bundle"
-grep -q 'sixty-three production tells' <<<"$JS" && ok "hero copy is current" || no "hero copy is stale"
+grep -q 'sixty-six production tells' <<<"$JS" && ok "hero copy is current" || no "hero copy is stale"
 
 echo "▸ things that quietly rot"
 grep -q 'href="#"' <<<"$PAGE" && no "a dead href=# shipped" || ok "no dead links"
