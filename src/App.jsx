@@ -614,7 +614,7 @@ export default function App() {
 
       <footer className="border-t border-white/10 px-6 py-8 md:px-12 lg:px-16">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 text-xs text-white/55 sm:flex-row sm:items-center sm:justify-between">
-          <span>rav v3.3.0 . a personal design skill</span>
+          <span>rav v3.4.0 . a personal design skill</span>
           <span>Built with the skill it documents.</span>
         </div>
       </footer>
