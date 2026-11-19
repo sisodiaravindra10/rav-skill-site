@@ -119,3 +119,16 @@ html {
   .move-detail, .move-face { animation: none; }
   .move-rail__item { transition: none; }
 }
+
+/* Every pressable answers a press. The two filled CTAs carry their own scale in
+   the markup; this covers the rest. */
+button, a { -webkit-tap-highlight-color: transparent; }
+button:active { transform: scale(0.97); }
+button { transition: transform 150ms cubic-bezier(0.23, 1, 0.32, 1); }
+.move-rail__item:active { transform: none; opacity: 0.7; }
+
+/* The rail tightens with distance on a mouse. On a touch screen every item
+   keeps a full-size target. */
+@media (min-width: 1024px) and (pointer: coarse) {
+  .move-rail__item { min-height: 44px; display: flex; align-items: center; }
+}

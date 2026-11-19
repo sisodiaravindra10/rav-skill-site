@@ -12,8 +12,10 @@ const NAV = [
 
 const INSTALL = "git clone https://github.com/sisodiaravindra10/rav-skill ~/.claude/skills/rav";
 
-// What changed between v2.1 and v3.2. Each line is a file or section in the skill repo.
+// What changed between v2.1 and v3.3. Each line is a file or section in the skill repo.
 const WHATS_NEW = [
+  { title: "Questions before pixels",
+    body: "It reads the project first, then asks one short round about the goal, the audience and what is real before it designs anything." },
   { title: "Conviction before compliance",
     body: "The rules are a floor. Every persuasive page now states one idea a stranger would repeat before any rule is applied." },
   { title: "A product-stage hero",
@@ -24,8 +26,6 @@ const WHATS_NEW = [
     body: "Eighteen sentence shapes that mark copy as machine-written, each with its fix, run on every visible string." },
   { title: "A micro-interaction floor",
     body: "Press feedback, hover only where devices hover, popovers that grow from their trigger. Distilled from Emil Kowalski's design engineering skill." },
-  { title: "A checker that reads more",
-    body: "The verify script now flags slop phrases, entrances from scale zero and ease-in, and reads OKLCH colours when it measures contrast." },
 ];
 
 // Every pair below is a real edit from one audit in this repo's history, quoted
@@ -164,7 +164,7 @@ function Nav({ mobileMenuOpen, setMobileMenuOpen }) {
 
       <a
         href={REPO}
-        className="hidden min-h-[44px] items-center rounded-lg bg-white px-5 py-2 text-sm font-medium text-black transition-transform hover:scale-105 md:inline-flex"
+        className="hidden min-h-[44px] items-center rounded-lg bg-white px-5 py-2 text-sm font-medium text-black transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:scale-[1.03] active:scale-[0.97] md:inline-flex"
       >
         Get the skill
       </a>
@@ -467,7 +467,7 @@ export default function App() {
             <a
               href={REPO}
               onClick={() => setMobileMenuOpen(false)}
-              className="mt-6 inline-flex min-h-[52px] items-center justify-center self-start rounded-full bg-white px-8 py-3.5 text-base font-medium text-black transition-transform hover:scale-105"
+              className="mt-6 inline-flex min-h-[52px] items-center justify-center self-start rounded-full bg-white px-8 py-3.5 text-base font-medium text-black transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:scale-[1.03] active:scale-[0.97]"
             >
               Get the skill
             </a>
@@ -478,10 +478,10 @@ export default function App() {
           {...(mobileMenuOpen ? { inert: "" } : {})}
           className="relative z-10 flex min-h-0 flex-1 flex-col justify-between px-6 pb-10 pt-12 sm:pb-12 sm:pt-16 md:px-12 md:pb-16 md:pt-20 lg:px-16">
           <div className="max-w-3xl">
-            <p className="hero-reveal mb-4 animate-[fadeSlideUp_0.8s_ease_0.2s_both] text-xs text-white/90 sm:mb-6 sm:text-sm">
+            <p className="hero-reveal mb-4 animate-[fadeSlideUp_0.8s_cubic-bezier(0.16,1,0.3,1)_0.2s_both] text-xs text-white/90 sm:mb-6 sm:text-sm">
               A personal design skill for Claude Code
             </p>
-            <h1 className="hero-reveal animate-[fadeSlideUp_0.8s_ease_0.4s_both] text-3xl font-medium leading-[1.1] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
+            <h1 className="hero-reveal animate-[fadeSlideUp_0.8s_cubic-bezier(0.16,1,0.3,1)_0.4s_both] text-3xl font-medium leading-[1.1] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
               Catches the defaults
               <br />
               you were about
@@ -493,11 +493,11 @@ export default function App() {
           <div>
             {/* tell count: grep -c '^- ' reference/tells.md in the skill repo,
                 minus the 3 hex-value bullets under Palette bans. Recount on bump. */}
-            <p className="hero-reveal mb-5 max-w-sm animate-[fadeSlideUp_0.8s_ease_0.7s_both] text-sm leading-relaxed text-white/60 sm:mb-6 sm:max-w-lg sm:text-base md:text-lg">
+            <p className="hero-reveal mb-5 max-w-sm animate-[fadeSlideUp_0.8s_cubic-bezier(0.16,1,0.3,1)_0.7s_both] text-sm leading-relaxed text-white/60 sm:mb-6 sm:max-w-lg sm:text-base md:text-lg">
               Three registers, sixteen scoped moves, and sixty-six production tells
               that run as the last filter before anything ships.
             </p>
-            <InstallLine className="hero-reveal animate-[fadeSlideUp_0.8s_ease_0.9s_both]" />
+            <InstallLine className="hero-reveal animate-[fadeSlideUp_0.8s_cubic-bezier(0.16,1,0.3,1)_0.9s_both]" />
           </div>
         </main>
       </section>
@@ -542,7 +542,7 @@ export default function App() {
                     <span className="shrink-0 select-none font-mono text-xs leading-6 text-white/60">
                       was
                     </span>
-                    <code className="min-w-0 overflow-x-auto whitespace-pre font-mono text-xs leading-6 text-white/50 line-through decoration-white/25 sm:text-[13px]">
+                    <code tabIndex={0} className="min-w-0 overflow-x-auto whitespace-pre font-mono text-xs leading-6 text-white/50 line-through decoration-white/25 sm:text-[13px]">
                       {c.before}
                     </code>
                   </div>
@@ -550,7 +550,7 @@ export default function App() {
                     <span className="shrink-0 select-none font-mono text-xs leading-6 text-accent">
                       now
                     </span>
-                    <code className="min-w-0 overflow-x-auto whitespace-pre font-mono text-xs leading-6 text-white/90 sm:text-[13px]">
+                    <code tabIndex={0} className="min-w-0 overflow-x-auto whitespace-pre font-mono text-xs leading-6 text-white/90 sm:text-[13px]">
                       {c.after}
                     </code>
                   </div>
@@ -614,7 +614,7 @@ export default function App() {
 
       <footer className="border-t border-white/10 px-6 py-8 md:px-12 lg:px-16">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 text-xs text-white/55 sm:flex-row sm:items-center sm:justify-between">
-          <span>rav v3.2.0 . a personal design skill</span>
+          <span>rav v3.3.0 . a personal design skill</span>
           <span>Built with the skill it documents.</span>
         </div>
       </footer>

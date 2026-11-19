@@ -17,5 +17,7 @@ export default {
       },
     },
   },
+  // Hover styles only where the device can hover, so nothing sticks after a tap.
+  future: { hoverOnlyWhenSupported: true },
   plugins: [],
 };
