@@ -348,7 +348,7 @@ export default function Below({ Explorer, Install, caught, repo, madeBy, version
   return (
     <>
       <div className="relative">
-        <Scene kind="night" className="pointer-events-none absolute inset-0 h-full w-full" />
+        <Scene kind="night" px={3} className="pointer-events-none absolute inset-0 h-full w-full" />
         <div className="relative">
           <Ask />
           <Layers />

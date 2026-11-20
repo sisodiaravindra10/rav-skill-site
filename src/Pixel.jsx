@@ -15,10 +15,11 @@ const rnd = (x, y) => { const n = Math.sin(x * 127.1 + y * 311.7) * 43758.5453; 
 const shade = (v, x, y, top = S.length - 1) => { const f = Math.min(1, Math.max(0, v)) * top, lo = Math.floor(f); return S[Math.min(top, lo + (f - lo > (BAYER[y & 3][x & 3] + 0.5) / 16 ? 1 : 0))]; };
 
 const SCENES = {
-  /* stars on a clear ground, kept faint so they never compete with the type */
+  /* a few stars on a clear ground: sparse, small and dim enough to be texture,
+     never something the eye lands on before the type */
   night({ w, h, set }) {
     for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
-      if (rnd(x * 1.3 + 7, y * 2.1 + 3) > 0.9984) set(x, y, STAR, 50 + Math.floor(rnd(y, x) * 110));
+      if (rnd(x * 1.3 + 7, y * 2.1 + 3) > 0.9993) set(x, y, STAR, 26 + Math.floor(rnd(y, x) * 46));
     }
   },
 
