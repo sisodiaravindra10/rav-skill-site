@@ -245,7 +245,7 @@ function MoveExplorer() {
                   <button
                     key={mv.verb} type="button" role="option" aria-selected={i === active} tabIndex={i === active ? 0 : -1}
                     onClick={() => pick(i)}
-                    className={`min-h-[44px] rounded-lg border px-3.5 font-mono text-sm transition-colors ${i === active ? "border-accent bg-accent text-[#140803]" : "border-white/14 text-white/75 hover:border-white/40 hover:text-white"}`}
+                    className={`min-h-[44px] rounded-lg border px-3.5 font-mono text-sm transition-colors ${i === active ? "border-accent bg-accent text-[#140803]" : "border-white/[0.14] text-white/75 hover:border-white/40 hover:text-white"}`}
                   >
                     {mv.verb}
                   </button>
@@ -258,7 +258,7 @@ function MoveExplorer() {
 
       {/* the stage */}
       <div className="min-w-0">
-        <div className="relative h-72 overflow-hidden rounded-xl border border-white/14 bg-black/40 sm:h-80">
+        <div className="relative h-72 overflow-hidden rounded-xl border border-white/[0.14] bg-black/40 sm:h-80">
           <div key={m.verb + "-was"} className="move-face absolute inset-0 flex items-center justify-center px-6 pb-8 pt-16 grayscale">
             <div className="sm:scale-150">{SPECIMENS[m.verb].was}</div>
           </div>
@@ -273,11 +273,11 @@ function MoveExplorer() {
             </div>
           )}
 
-          <div role="group" aria-label="Which example to show" className="absolute left-3 top-3 flex overflow-hidden rounded-lg border border-white/14 bg-[#0b0b0c]/90 font-mono text-[11px] uppercase tracking-[0.16em]">
+          <div role="group" aria-label="Which example to show" className="absolute left-3 top-3 flex overflow-hidden rounded-lg border border-white/[0.14] bg-[#0b0b0c]/90 font-mono text-[11px] uppercase tracking-[0.16em]">
             <button type="button" aria-pressed={phase === "was"} onClick={() => setPhase("was")} className={`min-h-[44px] px-3 ${phase === "was" ? "bg-white/15 text-white" : "text-white/55 hover:text-white"}`}>Was</button>
             <button type="button" aria-pressed={phase === "now"} onClick={() => { setPhase("now"); setRun((r) => r + 1); }} className={`min-h-[44px] px-3 ${phase === "now" ? "bg-accent text-[#140803]" : "text-white/55 hover:text-white"}`}>Now</button>
           </div>
-          <button type="button" onClick={() => { setPhase("now"); setRun((r) => r + 1); }} className="absolute right-3 top-3 min-h-[44px] rounded-lg border border-white/14 bg-[#0b0b0c]/90 px-3 font-mono text-[11px] uppercase tracking-[0.16em] text-white/70 hover:text-white">
+          <button type="button" onClick={() => { setPhase("now"); setRun((r) => r + 1); }} className="absolute right-3 top-3 min-h-[44px] rounded-lg border border-white/[0.14] bg-[#0b0b0c]/90 px-3 font-mono text-[11px] uppercase tracking-[0.16em] text-white/70 hover:text-white">
             Run it again
           </button>
         </div>
@@ -291,7 +291,7 @@ function MoveExplorer() {
           <p className="mt-5 flex flex-wrap items-center gap-2 font-mono text-xs text-white/50">
             <span>combines with</span>
             {m.combines.map((c) => (
-              <button key={c} type="button" onClick={() => pick(MOVES.findIndex((x) => x.verb === c))} className="min-h-[44px] rounded-md border border-white/14 px-2.5 text-accent hover:border-accent">
+              <button key={c} type="button" onClick={() => pick(MOVES.findIndex((x) => x.verb === c))} className="min-h-[44px] rounded-md border border-white/[0.14] px-2.5 text-accent hover:border-accent">
                 /{c}
               </button>
             ))}

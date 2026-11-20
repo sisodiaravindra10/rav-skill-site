@@ -21,7 +21,7 @@ const Bar = ({ w, tone = "dim", h = 6 }) => (
   <span
     className={
       "block rounded-full " +
-      { dim: "bg-white/22", mid: "bg-white/40", bright: "bg-white/80", accent: "bg-accent" }[tone]
+      { dim: "bg-white/[0.22]", mid: "bg-white/40", bright: "bg-white/80", accent: "bg-accent" }[tone]
     }
     style={{ width: w, height: h }}
   />
@@ -31,7 +31,7 @@ const Box = ({ children, tone = "line", className = "" }) => (
   <div
     className={
       "rounded-md p-2.5 " +
-      { line: "border border-white/12",
+      { line: "border border-white/[0.12]",
         loud: "border border-red-500/70 bg-red-500/25 shadow-[0_10px_30px_-6px_rgba(239,68,68,0.5)]",
         calm: "border border-red-400/25 bg-red-400/10" }[tone] +
       " " + className
@@ -88,7 +88,7 @@ export const SPECIMENS = {
   harden: {
     was: (
       <Stack gap={6}>
-        <div className="w-[92px] overflow-hidden rounded border border-white/12 px-2 py-1">
+        <div className="w-[92px] overflow-hidden rounded border border-white/[0.12] px-2 py-1">
           <span className="block whitespace-nowrap font-mono text-[10px] text-white/70">Großherzogin</span>
         </div>
         <Label>clipped</Label>

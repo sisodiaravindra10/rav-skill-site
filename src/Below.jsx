@@ -23,7 +23,7 @@ const Px = ({ src, size, className = "" }) => (
 
 /* A typed line in a quiet frame: the way every section shows what you would type. */
 const Cmd = ({ children, sign = "$", className = "" }) => (
-  <p className={`w-fit max-w-full overflow-x-auto whitespace-nowrap rounded-xl border border-white/12 bg-white/[0.03] px-5 py-3.5 font-mono text-xs text-white/75 sm:text-sm ${className}`} tabIndex={0}>
+  <p className={`w-fit max-w-full overflow-x-auto whitespace-nowrap rounded-xl border border-white/[0.12] bg-white/[0.03] px-5 py-3.5 font-mono text-xs text-white/75 sm:text-sm ${className}`} tabIndex={0}>
     <span className="mr-2 text-accent">{sign}</span>{children}
   </p>
 );
@@ -69,7 +69,7 @@ function Ask() {
               <li key={x.q} className="space-y-4">
                 <div className="flex items-end gap-3">
                   <Px src="raven-tile" size={40} className="rounded-lg" />
-                  <p className="max-w-xl rounded-3xl rounded-bl-md border border-white/12 bg-white/[0.04] px-5 py-4 text-base leading-snug text-white md:text-lg">{x.q}</p>
+                  <p className="max-w-xl rounded-3xl rounded-bl-md border border-white/[0.12] bg-white/[0.04] px-5 py-4 text-base leading-snug text-white md:text-lg">{x.q}</p>
                 </div>
                 <p className="ml-auto w-fit max-w-md rounded-3xl rounded-br-md bg-[#f6f3ee] px-5 py-4 text-base leading-snug text-ink md:text-lg">{x.a}</p>
               </li>
@@ -78,7 +78,7 @@ function Ask() {
 
           <div className="relative mt-12 rounded-2xl border border-accent bg-white/[0.03]">
             <Px src="raven-sit-orange" size={56} className="absolute -top-[53px] right-8" />
-            <div className="flex items-center justify-between gap-4 border-b border-white/12 px-6 py-4">
+            <div className="flex items-center justify-between gap-4 border-b border-white/[0.12] px-6 py-4">
               <span className="font-mono text-sm text-accent">profile/process.md</span>
               <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">outranks the rules</span>
             </div>
@@ -112,7 +112,7 @@ function Layers() {
         </p>
       </div>
       <div className="mt-16 grid gap-6 lg:grid-cols-[5fr_7fr] lg:gap-10">
-        <div className="relative overflow-hidden rounded-xl border border-white/14">
+        <div className="relative overflow-hidden rounded-xl border border-white/[0.14]">
           <Scene kind="strata" className="h-72 w-full lg:h-full lg:min-h-[26rem]" />
           <span className="absolute left-4 top-[34%] rounded bg-[#0b0b0c]/85 px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-accent">your profile</span>
           <span className="absolute left-4 top-[70%] rounded bg-[#0b0b0c]/85 px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-white/75">the core</span>
@@ -129,14 +129,14 @@ function Layers() {
               {["profile/process.md", "profile/dna.md"].map((c) => <li key={c} className="rounded-md border border-accent/50 px-2.5 py-1 font-mono text-xs text-accent">{c}</li>)}
             </ul>
           </div>
-          <div className="flex-1 rounded-2xl border border-white/12 bg-[#0b0b0c]/70 p-7 md:p-9">
+          <div className="flex-1 rounded-2xl border border-white/[0.12] bg-[#0b0b0c]/70 p-7 md:p-9">
             <div className="flex flex-wrap items-baseline justify-between gap-3">
               <h3 className="text-2xl font-medium tracking-tight text-white md:text-3xl">The core</h3>
               <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">shared, the floor</span>
             </div>
             <p className="mt-3 max-w-2xl text-base leading-relaxed text-white/60">Three laws, colour, type, layout, imagery, copy, motion, sixteen scoped moves, and a checker that runs. The bedrock everything stands on.</p>
             <ul className="mt-6 flex flex-wrap gap-2">
-              {chips.map((c) => <li key={c} className="rounded-md border border-white/12 px-2.5 py-1 font-mono text-xs text-white/70">{c}</li>)}
+              {chips.map((c) => <li key={c} className="rounded-md border border-white/[0.12] px-2.5 py-1 font-mono text-xs text-white/70">{c}</li>)}
             </ul>
           </div>
         </div>
@@ -158,7 +158,7 @@ function Flight() {
     <Wrap id="flight" className="border-t border-white/10">
       <Kicker>a new build</Kicker>
       <H2 className="mt-5 max-w-3xl">What it does on a new page.</H2>
-      <div className="relative mt-12 overflow-hidden rounded-xl border border-white/14">
+      <div className="relative mt-12 overflow-hidden rounded-xl border border-white/[0.14]">
         <Scene kind="flight" className="h-44 w-full sm:h-56 md:h-64" />
         <Px src="raven-fly-orange" size={64} className="absolute left-[70%] top-[10%] -translate-x-[10%]" />
       </div>
@@ -186,7 +186,7 @@ function Compare() {
   return (
     <div
       ref={pane}
-      className="relative aspect-[16/10] w-full cursor-ew-resize touch-none select-none overflow-hidden rounded-xl border border-white/14 bg-black"
+      className="relative aspect-[16/10] w-full cursor-ew-resize touch-none select-none overflow-hidden rounded-xl border border-white/[0.14] bg-black"
       onPointerDown={(e) => { dragging.current = true; e.currentTarget.setPointerCapture?.(e.pointerId); set(e.clientX); }}
       onPointerMove={(e) => dragging.current && set(e.clientX)}
       onPointerUp={() => { dragging.current = false; }}
@@ -226,7 +226,7 @@ function Proof({ repo }) {
           <Kicker>proof/kiln</Kicker>
           <H2 className="mt-5">One prompt, with and without.</H2>
         </div>
-        <p className="rounded-xl border border-white/12 bg-white/[0.03] px-5 py-4 font-mono text-xs leading-relaxed text-white/75 sm:text-sm">
+        <p className="rounded-xl border border-white/[0.12] bg-white/[0.03] px-5 py-4 font-mono text-xs leading-relaxed text-white/75 sm:text-sm">
           <span className="text-accent">&gt;</span> landing page for Kiln, a small ceramics studio in Jaipur that sells handmade tableware online and runs weekend wheel-throwing classes.
         </p>
       </div>
@@ -242,7 +242,7 @@ function Proof({ repo }) {
           <span role="columnheader"><span className="rounded bg-accent px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-[#140803]">With rav</span></span>
         </div>
         {tally.map(([a, b, label, note]) => (
-          <div key={label} role="row" className="grid grid-cols-2 items-center gap-x-6 gap-y-3 border-t border-white/12 py-6 sm:grid-cols-[1.3fr_1fr_1fr]">
+          <div key={label} role="row" className="grid grid-cols-2 items-center gap-x-6 gap-y-3 border-t border-white/[0.12] py-6 sm:grid-cols-[1.3fr_1fr_1fr]">
             <div role="rowheader" className="col-span-2 sm:col-span-1">
               <p className="text-lg font-medium text-white md:text-xl">{label}</p>
               {note && <p className="mt-1 text-sm text-white/55">{note}</p>}
@@ -257,7 +257,7 @@ function Proof({ repo }) {
             </div>
           </div>
         ))}
-        <div role="row" className="grid grid-cols-2 items-start gap-x-6 gap-y-3 border-y border-white/12 py-6 sm:grid-cols-[1.3fr_1fr_1fr]">
+        <div role="row" className="grid grid-cols-2 items-start gap-x-6 gap-y-3 border-y border-white/[0.12] py-6 sm:grid-cols-[1.3fr_1fr_1fr]">
           <div role="rowheader" className="col-span-2 sm:col-span-1"><p className="text-lg font-medium text-white md:text-xl">The look</p></div>
           <div role="cell">
             <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/50 sm:hidden">Without the skill</p>
