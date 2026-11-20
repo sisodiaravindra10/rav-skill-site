@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
    and a single switch to a full orange field at the close. */
 
 const Wrap = ({ id, children, className = "" }) => (
-  <section id={id} className={`relative px-6 py-24 md:px-12 md:py-32 lg:px-16 ${className}`}>
+  <section id={id} className={`relative scroll-mt-16 px-6 py-24 md:px-12 md:py-32 lg:px-16 ${className}`}>
     <div className="mx-auto max-w-6xl">{children}</div>
   </section>
 );
@@ -252,7 +252,7 @@ function Close({ Install, repo, madeBy }) {
   return (
     <>
       <Dither from="#0b0b0c" to="#f58549" />
-      <section id="get" className="bg-accent px-6 pb-20 pt-16 text-[#140803] md:px-12 md:pb-28 md:pt-24 lg:px-16">
+      <section id="get" className="scroll-mt-16 bg-accent px-6 pb-20 pt-16 text-[#140803] md:px-12 md:pb-28 md:pt-24 lg:px-16">
         <div className="mx-auto max-w-6xl">
           <div className="flex flex-wrap items-end gap-x-10 gap-y-6">
             <Px src="raven-sit-inkbone" size={168} className="-mb-2" />

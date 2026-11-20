@@ -134,8 +134,21 @@ const MOVES = [
 ];
 
 function Nav({ mobileMenuOpen, setMobileMenuOpen }) {
+  // The bar stays with you. It is clear over the sky and takes a dark ground
+  // once the page has moved, watched with an observer on a marker at the top
+  // of the page, not a scroll listener.
+  const [moved, setMoved] = useState(false);
+  const mark = useRef(null);
+  useEffect(() => {
+    const io = new IntersectionObserver(([e]) => setMoved(!e.isIntersecting));
+    if (mark.current) io.observe(mark.current);
+    return () => io.disconnect();
+  }, []);
   return (
-    <nav className="relative z-30 flex items-center justify-between px-6 py-5 md:px-12 lg:px-16">
+    <>
+    <span ref={mark} aria-hidden="true" className="pointer-events-none absolute left-0 top-0 h-6 w-px" />
+    <div aria-hidden="true" className="h-[84px] shrink-0" />
+    <nav className={`fixed inset-x-0 top-0 z-30 flex items-center justify-between px-6 py-5 transition-[background-color,border-color] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] md:px-12 lg:px-16 ${moved && !mobileMenuOpen ? "border-b border-white/10 bg-[#0b0b0c]/85 backdrop-blur-md" : "border-b border-transparent"}`}>
       <div className="flex items-center gap-10">
         <a
           href="#top"
@@ -185,6 +198,7 @@ function Nav({ mobileMenuOpen, setMobileMenuOpen }) {
         />
       </button>
     </nav>
+    </>
   );
 }
 
@@ -401,7 +415,7 @@ export default function App() {
         {/* Dusk over Jodhpur, drawn in pixels. The light is low on the right, so
             the type column sits in the dark half of the sky. */}
         <DuskSky />
-        <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(0deg,rgba(11,11,12,0.9)_0%,rgba(11,11,12,0.78)_22%,rgba(11,11,12,0)_40%)] md:bg-[linear-gradient(90deg,rgba(11,11,12,0.55)_0%,rgba(11,11,12,0.25)_38%,rgba(11,11,12,0)_62%)]" />
+        <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(0deg,rgba(11,11,12,0.7)_0%,rgba(11,11,12,0.5)_24%,rgba(11,11,12,0)_34%)] md:bg-[linear-gradient(90deg,rgba(11,11,12,0.55)_0%,rgba(11,11,12,0.25)_38%,rgba(11,11,12,0)_62%)]" />
 
         <Nav mobileMenuOpen={mobileMenuOpen} setMobileMenuOpen={setMobileMenuOpen} />
 

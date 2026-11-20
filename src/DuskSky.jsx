@@ -14,9 +14,12 @@ const SKY_RGB = SKY.map(hex);
 const GROUND = hex("#070709"), HOUSE = hex("#111a3a"), LAMP = hex("#f58549"), SUN = hex("#ffe1b0"), STAR = hex("#e9e4ff");
 const rnd = (x, y) => { const n = Math.sin(x * 127.1 + y * 311.7) * 43758.5453; return n - Math.floor(n); };
 
-/* Ridge line with the fort on it, as a height above the bottom edge (0..1 of h). */
+/* Ridge line with the fort on it, as a height above the bottom edge (0..1 of h).
+   On a narrow screen the land is lifted, so the sun sets in view and the text
+   below the headline sits on the dark hillside. */
+let LIFT = 0;
 function ridge(u) {
-  let h = 0.13 + 0.05 * Math.sin(u * 3.1 + 0.6) + 0.02 * Math.sin(u * 11.0);
+  let h = LIFT + 0.13 + 0.05 * Math.sin(u * 3.1 + 0.6) + 0.02 * Math.sin(u * 11.0);
   // the rock the fort stands on
   const rock = Math.max(0, 1 - Math.abs((u - 0.27) / 0.26));
   h += 0.15 * Math.pow(rock, 0.7);
@@ -48,8 +51,12 @@ export default function DuskSky({ className = "" }) {
       w = Math.max(60, Math.ceil(r.width / px)); h = Math.max(60, Math.ceil(r.height / px));
       cv.width = w; cv.height = h;
       const img = ctx.createImageData(w, h); const d = img.data; stars = []; lamps = [];
-      const narrow = r.width < 700;
-      const sx = (narrow ? 0.98 : 0.8) * w, horizon = h * (narrow ? 0.84 : 0.8), sr = Math.max(9, w * (narrow ? 0.13 : 0.085));
+      const narrow = r.width < 700; LIFT = narrow ? 0.2 : 0;
+      const sx = (narrow ? 0.78 : 0.8) * w, sr = Math.max(9, w * (narrow ? 0.15 : 0.085));
+      // The sun is a whole disc whose centre sits just below the ridge line at its
+      // own x, so the land in front covers its lower part. It sets behind the hill.
+      const su = Math.min(0.999, sx / w), ridgeY = h * (1 - (ridge(su) + fort(su, w)));
+      const horizon = ridgeY + sr * 0.3;
       for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
         const u = x / w, i = (y * w + x) * 4;
         const gy = (h - y) / h;                       // height above the bottom
@@ -58,20 +65,20 @@ export default function DuskSky({ className = "" }) {
         if (gy < top) {
           c = GROUND;
           // the old city at the foot of the rock: a few blue walls, a few lit windows
-          if (gy < rh * 0.62 && u > 0.02) {
+          if (gy < (rh - LIFT) * 0.62 + LIFT * 0.55 && u > 0.02) {
             const bx = Math.floor(x / 3), by = Math.floor(y / 3), k = rnd(bx, by);
             if (k > 0.72 && u > 0.06) c = HOUSE;
             if (k > 0.975 && x % 3 === 1 && y % 3 === 1) { c = LAMP; lamps.push([x, y, k * 50]); }
           }
         } else {
           const dx = (x - sx) / w, dy = (y - horizon) / h;
-          const glow = Math.exp(-(dx * dx * (narrow ? 9 : 5.5) + dy * dy * (narrow ? 16 : 9)));
+          const glow = Math.exp(-(dx * dx * (narrow ? 6 : 5.5) + dy * dy * (narrow ? 20 : 9)));
           const down = Math.pow(y / horizon, 2.1);
           let v = Math.min(1, Math.max(0, down * 0.42 + glow * 0.66));
           const f = v * (SKY_RGB.length - 1), lo = Math.floor(f), t = f - lo;
           c = SKY_RGB[Math.min(SKY_RGB.length - 1, lo + (t > (BAYER[y & 3][x & 3] + 0.5) / 16 ? 1 : 0))];
           const ddx = x - sx, ddy = y - horizon;
-          if (ddx * ddx + ddy * ddy < sr * sr && y < horizon) c = (y % 5 === 4 && y > horizon - sr * 0.55) ? SKY_RGB[7] : SUN;
+          if (ddx * ddx + ddy * ddy < sr * sr) c = (y % 5 === 4 && y > horizon - sr * 0.55) ? SKY_RGB[7] : SUN;
           else if (v < 0.16 && rnd(x * 1.7, y * 2.3) > 0.9986) stars.push([x, y, rnd(x, y) * 6.28]);
         }
         d[i] = c[0]; d[i + 1] = c[1]; d[i + 2] = c[2]; d[i + 3] = 255;
@@ -85,11 +92,14 @@ export default function DuskSky({ className = "" }) {
       ctx.putImageData(base, 0, 0);
       if (!still && sun) {
         // the sun's bands slide down slowly, like light through haze
-        const band = Math.floor(t / 420) % 5;
+        const band = Math.floor(t / 420) % 5, d = base.data;
         ctx.fillStyle = "#f58549";
-        for (let y = Math.floor(sun.y - sun.r * 0.6); y < sun.y; y++) if ((y + band) % 5 === 0) {
+        for (let y = Math.max(0, Math.floor(sun.y - sun.r * 0.6)); y < Math.min(h, sun.y + sun.r); y++) if ((y + band) % 5 === 0) {
           const half = Math.floor(Math.sqrt(Math.max(0, sun.r * sun.r - (y - sun.y) * (y - sun.y))));
-          ctx.fillRect(Math.floor(sun.x - half), y, half * 2, 1);
+          for (let x = Math.max(0, Math.floor(sun.x - half)); x < Math.min(w, sun.x + half); x++) {
+            const i = (y * w + x) * 4;                      // sun pixels only: pale disc or its static band
+            if (d[i] > 230 && d[i + 2] > 60) ctx.fillRect(x, y, 1, 1);
+          }
         }
         // thin cloud streaks drifting across the glow
         ctx.fillStyle = "rgba(52,24,58,0.55)";
