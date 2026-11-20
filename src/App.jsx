@@ -74,7 +74,7 @@ const MOVES = [
     caption: "One section rises to meet its neighbours" },
   { verb: "quieter", group: "refine", gloss: "reduce intensity, keep the point of view",
     combines: ["colorize", "distill"],
-    before: "bg-red-500 text-white shadow-xl animate-pulse", after: "bg-red-500/12 text-red-200 border border-red-500/25",
+    before: "bg-red-500 text-white shadow-xl animate-pulse", after: "bg-red-500/10 text-red-200 border border-red-500/25",
     caption: "Intensity drops, the point of view survives" },
   { verb: "distill", group: "refine", gloss: "strip what does not earn its place",
     combines: ["clarify", "layout"],
