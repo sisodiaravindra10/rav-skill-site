@@ -12,12 +12,12 @@ const NAV = [
 
 const INSTALL = "git clone https://github.com/sisodiaravindra10/rav-skill ~/.claude/skills/rav";
 
-// What changed between v2.1 and v3.5. Each line is a file or section in the skill repo.
+// What changed between v2.1 and v4.0. Each line is a file or section in the skill repo.
 const WHATS_NEW = [
   { title: "Questions before pixels",
     body: "It reads the project first, then asks one short round about the goal, the audience and what is real before it designs anything." },
-  { title: "His process, in his words",
-    body: "It starts from a place or a memory, shows more than one direction, and finishes the hero before anything else is built." },
+  { title: "Your profile, in your words",
+    body: "Run /rav setup. Ten questions, one at a time, about how you start, how you choose and what you refuse. The answers outrank every rule here." },
   { title: "A product-stage hero",
     body: "The brand colour as a full field, the headline at real scale, and the real product shown large. The default for software pages." },
   { title: "A checked font roster",
@@ -146,8 +146,8 @@ function Nav({ mobileMenuOpen, setMobileMenuOpen }) {
           href="#top"
           className="flex min-h-[44px] items-center gap-2.5 text-lg font-semibold tracking-tight text-white sm:text-xl"
         >
+          <img src="/mascot/raven-tile.svg" alt="" width="28" height="28" className="pixel h-7 w-7" />
           rav
-          <span aria-hidden="true" className="block h-2.5 w-2.5 bg-accent" />
         </a>
         <div className="hidden items-center gap-8 md:flex">
           {NAV.map((l) => (
@@ -477,16 +477,18 @@ export default function App() {
         <main
           {...(mobileMenuOpen ? { inert: "" } : {})}
           className="relative z-10 flex min-h-0 flex-1 flex-col justify-between px-6 pb-10 pt-12 sm:pb-12 sm:pt-16 md:px-12 md:pb-16 md:pt-20 lg:px-16">
+          {/* The mascot crosses the first screen once after load, then leaves. */}
+          <img src="/mascot/raven-fly-orange.svg" alt="" aria-hidden="true" className="raven-flight pixel" />
           <div className="max-w-3xl">
             <p className="hero-reveal mb-4 animate-[fadeSlideUp_0.8s_cubic-bezier(0.16,1,0.3,1)_0.2s_both] text-xs text-white/90 sm:mb-6 sm:text-sm">
-              A personal design skill for Claude Code
+              A design skill for Claude Code
             </p>
             <h1 className="hero-reveal animate-[fadeSlideUp_0.8s_cubic-bezier(0.16,1,0.3,1)_0.4s_both] text-3xl font-medium leading-[1.1] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
-              Catches the defaults
+              A design skill
               <br />
-              you were about
+              that learns
               <br />
-              to ship.
+              <span className="text-accent">your</span> taste.
             </h1>
           </div>
 
@@ -494,8 +496,8 @@ export default function App() {
             {/* tell count: grep -c '^- ' reference/tells.md in the skill repo,
                 minus the 3 hex-value bullets under Palette bans. Recount on bump. */}
             <p className="hero-reveal mb-5 max-w-sm animate-[fadeSlideUp_0.8s_cubic-bezier(0.16,1,0.3,1)_0.7s_both] text-sm leading-relaxed text-white/60 sm:mb-6 sm:max-w-lg sm:text-base md:text-lg">
-              Three registers, sixteen scoped moves, and sixty-six production tells
-              that run as the last filter before anything ships.
+              Ten questions about how you work become a profile. It sits on top of three
+              registers, sixteen scoped moves and sixty-six production tells, and it outranks them.
             </p>
             <InstallLine className="hero-reveal animate-[fadeSlideUp_0.8s_cubic-bezier(0.16,1,0.3,1)_0.9s_both]" />
           </div>
@@ -588,7 +590,7 @@ export default function App() {
           </div>
 
           <div className="mt-14 border-t border-white/10 pt-10">
-            <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent">New in v3</p>
+            <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent">New in v4</p>
             <ul className="mt-8 grid gap-x-12 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
               {WHATS_NEW.map((n) => (
                 <li key={n.title}>
@@ -614,7 +616,10 @@ export default function App() {
 
       <footer className="border-t border-white/10 px-6 py-8 md:px-12 lg:px-16">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 text-xs text-white/55 sm:flex-row sm:items-center sm:justify-between">
-          <span>rav v3.5.0 . a personal design skill</span>
+          <span className="flex items-center gap-3">
+            <img src="/mascot/raven-sit-orange.svg" alt="" width="20" height="20" className="pixel h-5 w-5" />
+            rav v4.0.0 . a design skill that learns your taste
+          </span>
           <span>Built with the skill it documents.</span>
         </div>
       </footer>
