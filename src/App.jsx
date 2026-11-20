@@ -204,10 +204,7 @@ function Nav({ mobileMenuOpen, setMobileMenuOpen }) {
 
 function MoveExplorer() {
   const [active, setActive] = useState(0);
-  const [split, setSplit] = useState(52);
   const railRef = useRef(null);
-  const paneRef = useRef(null);
-  const dragging = useRef(false);
   const m = MOVES[active];
 
   // Arrow keys walk the rail, so the whole thing works without a pointer.
@@ -220,23 +217,6 @@ function MoveExplorer() {
     const el = railRef.current?.querySelectorAll("[role=option]")[next];
     el?.focus();
   };
-
-  const setFromPointer = (clientX) => {
-    const r = paneRef.current?.getBoundingClientRect();
-    if (!r) return;
-    setSplit(Math.min(92, Math.max(8, ((clientX - r.left) / r.width) * 100)));
-  };
-
-  useEffect(() => {
-    const move = (e) => dragging.current && setFromPointer(e.clientX ?? e.touches?.[0]?.clientX);
-    const up = () => (dragging.current = false);
-    window.addEventListener("pointermove", move);
-    window.addEventListener("pointerup", up);
-    return () => {
-      window.removeEventListener("pointermove", move);
-      window.removeEventListener("pointerup", up);
-    };
-  }, []);
 
   return (
     <div className="grid gap-10 lg:grid-cols-[minmax(0,11rem)_minmax(0,1fr)] lg:gap-14">
@@ -290,62 +270,19 @@ function MoveExplorer() {
           </p>
         </div>
 
-        {/* the split: before underneath, after revealed by the divider */}
+        {/* was and now, side by side at full size, with the raven on the seam */}
         <div className="min-w-0">
-          <div
-            ref={paneRef}
-            className="relative h-60 min-w-0 cursor-ew-resize touch-none select-none overflow-hidden rounded-xl border border-white/10 bg-black/40 sm:h-64"
-            onPointerDown={(e) => {
-              dragging.current = true;
-              e.currentTarget.setPointerCapture?.(e.pointerId);
-              setFromPointer(e.clientX);
-            }}
-          >
-            <div
-              key={m.verb + "-b"}
-              className="move-face absolute inset-0 flex items-center justify-center overflow-hidden px-5 py-9 grayscale"
-              style={{ clipPath: `inset(0 ${100 - split}% 0 0)` }}
-            >
-              {SPECIMENS[m.verb].was}
+          <div className="relative grid overflow-hidden rounded-xl border border-white/14 bg-black/40 sm:grid-cols-2">
+            <div key={m.verb + "-b"} className="move-face relative flex min-h-[13rem] items-center justify-center px-6 pb-10 pt-14 grayscale sm:min-h-[19rem]">
+              <span className="pointer-events-none absolute left-3 top-3 rounded bg-white/10 px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-white/75">Was</span>
+              <div className="sm:scale-110">{SPECIMENS[m.verb].was}</div>
             </div>
-            <div
-              key={m.verb + "-a"}
-              className="move-face absolute inset-0 flex items-center justify-center overflow-hidden bg-ink px-5 py-9"
-              style={{ clipPath: `inset(0 0 0 ${split}%)` }}
-            >
-              {SPECIMENS[m.verb].now}
+            <div key={m.verb + "-a"} className="move-face relative flex min-h-[13rem] items-center justify-center border-t-[3px] border-accent bg-ink px-6 pb-10 pt-14 sm:min-h-[19rem] sm:border-l-[3px] sm:border-t-0">
+              <span className="pointer-events-none absolute right-3 top-3 rounded bg-accent px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-[#140803]">Now</span>
+              <div className="sm:scale-110">{SPECIMENS[m.verb].now}</div>
             </div>
-
-            <div
-              className="absolute inset-y-0 w-px bg-accent"
-              style={{ left: `${split}%` }}
-              aria-hidden="true"
-            />
-            <div
-              role="slider"
-              tabIndex={0}
-              aria-label="Reveal the result"
-              aria-valuemin={8}
-              aria-valuemax={92}
-              aria-valuenow={Math.round(split)}
-              onKeyDown={(e) => {
-                const d = e.key === "ArrowRight" ? 4 : e.key === "ArrowLeft" ? -4 : 0;
-                if (!d) return;
-                e.preventDefault();
-                setSplit((v) => Math.min(92, Math.max(8, v + d)));
-              }}
-              style={{ left: `${split}%` }}
-              className="absolute top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize items-center justify-center rounded-full border border-accent bg-ink text-accent shadow-[0_0_0_4px_rgba(11,11,12,0.7)] focus-visible:outline-offset-4"
-            >
-              <MoveHorizontal size={15} />
-            </div>
-
-            <span className="pointer-events-none absolute left-3 top-3 font-mono text-[10px] uppercase tracking-[0.16em] text-white/60">
-              was
-            </span>
-            <span className="pointer-events-none absolute right-3 top-3 font-mono text-[10px] uppercase tracking-[0.16em] text-accent">
-              now
-            </span>
+            <img src="/mascot/raven-tile.svg" alt="" aria-hidden="true" draggable={false} width="48" height="48"
+              className="pixel pointer-events-none absolute left-1/2 top-4 hidden h-11 w-11 -translate-x-1/2 rounded-lg shadow-[0_0_0_4px_rgba(11,11,12,0.8)] sm:block" />
           </div>
           <p key={m.verb + "-c"} className="move-detail mt-4 text-center text-xs text-white/50">
             {m.caption}

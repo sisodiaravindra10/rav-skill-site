@@ -20,6 +20,21 @@ const Px = ({ src, size, className = "" }) => (
   <img src={`/mascot/${src}.svg`} alt="" aria-hidden="true" draggable={false} width={size} height={size} className={`pixel pointer-events-none shrink-0 ${className}`} style={{ width: size, height: size }} />
 );
 
+/* A typed line in a quiet frame: the way every section shows what you would type. */
+const Cmd = ({ children, sign = "$", className = "" }) => (
+  <p className={`w-fit max-w-full overflow-x-auto whitespace-nowrap rounded-xl border border-white/12 bg-white/[0.03] px-5 py-3.5 font-mono text-xs text-white/75 sm:text-sm ${className}`} tabIndex={0}>
+    <span className="mr-2 text-accent">{sign}</span>{children}
+  </p>
+);
+/* One large orange figure with its unit, as in the proof and the checker. */
+const Figure = ({ n, label, note }) => (
+  <div>
+    <p className="font-mono text-6xl leading-none tracking-tight text-accent tabular-nums md:text-7xl">{n}</p>
+    <p className="mt-3 text-base font-medium text-white">{label}</p>
+    {note && <p className="mt-1 text-sm text-white/55">{note}</p>}
+  </div>
+);
+
 /* A band of ordered dither between two flat colours, drawn as an SVG pattern. */
 const Dither = ({ from, to, flip = false }) => (
   <svg aria-hidden="true" className="pixel block h-6 w-full" preserveAspectRatio="none" style={{ background: from, transform: flip ? "scaleY(-1)" : undefined }}>
@@ -56,6 +71,10 @@ function Ask() {
           <p className="mt-4 max-w-md text-base leading-relaxed text-white/65 md:text-lg">
             The answers become a file on your machine. From then on it is read before anything is built.
           </p>
+          <div className="mt-10 grid max-w-md grid-cols-2 gap-8 border-t border-white/10 pt-8">
+            <Figure n="10" label="questions" note="one at a time" />
+            <Figure n="1" label="file" note="on your machine, never uploaded" />
+          </div>
         </div>
 
         <div>
@@ -99,13 +118,15 @@ function Layers() {
   return (
     <Wrap id="layers" className="border-t border-white/10">
       <div className="max-w-3xl">
-        <H2>Two layers. Yours wins.</H2>
+        <Kicker>profile/ over reference/</Kicker>
+        <H2 className="mt-5">Two layers. Yours wins.</H2>
         <p className="mt-6 max-w-xl text-base leading-relaxed text-white/65 md:text-lg">
           Rules shared by everyone make pages everyone has seen. So the rules are the floor, and your own process sits on top of them.
         </p>
       </div>
       <div className="mt-16">
         <div className="relative z-10 rounded-2xl border border-accent bg-[#1d130e] p-7 md:w-[64%] md:p-10">
+          <Px src="raven-sit-orange" size={56} className="absolute -top-[53px] right-10" />
           <div className="flex flex-wrap items-baseline justify-between gap-3">
             <h3 className="text-2xl font-medium tracking-tight text-white md:text-3xl">Your profile</h3>
             <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-accent">private, written by setup</span>
@@ -141,7 +162,8 @@ const STEPS = [
 function Flight() {
   return (
     <Wrap id="flight" className="border-t border-white/10">
-      <H2 className="max-w-3xl">What it does on a new page.</H2>
+      <Kicker>a new build</Kicker>
+      <H2 className="mt-5 max-w-3xl">What it does on a new page.</H2>
       <ol className="relative mt-20 grid gap-10 md:grid-cols-5 md:gap-6">
         <span aria-hidden="true" className="absolute left-[7px] top-2 h-[calc(100%-1rem)] w-[2px] bg-[repeating-linear-gradient(180deg,rgba(255,255,255,0.3)_0_6px,transparent_6px_12px)] md:left-0 md:top-[7px] md:h-[2px] md:w-full md:bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.3)_0_6px,transparent_6px_12px)]" />
         {STEPS.map(([t, d], i) => {
@@ -149,7 +171,7 @@ function Flight() {
           return (
             <li key={t} className="relative pl-9 md:pl-0 md:pt-10">
               <span aria-hidden="true" className={`absolute left-0 top-1 block h-4 w-4 md:top-0 ${hot ? "bg-accent" : "bg-white/35"}`} />
-              {hot && <Px src="raven-sit-orange" size={52} className="absolute -top-[48px] left-[-18px] hidden md:block" />}
+              {hot && <Px src="raven-fly-orange" size={60} className="absolute -top-[58px] left-[-12px] hidden md:block" />}
               <h3 className={`text-xl font-medium tracking-tight md:text-2xl ${hot ? "text-accent" : "text-white"}`}>{t}</h3>
               <p className="mt-2 text-sm leading-relaxed text-white/60 md:text-base">{d}</p>
             </li>
@@ -254,6 +276,7 @@ function Checker({ caught }) {
           <p className="mt-6 max-w-md text-base leading-relaxed text-white/65 md:text-lg">
             Rules a model reads get broken. Rules a script runs do not. These four came out of one audit of a page that already looked finished.
           </p>
+          <Cmd className="mt-8">node scripts/verify.mjs --source src/</Cmd>
         </div>
         <ul className="grid gap-x-10 gap-y-12 sm:grid-cols-2">
           {caught.map((c) => (
@@ -279,8 +302,11 @@ function Moves({ Explorer }) {
   return (
     <Wrap id="run" className="border-t border-white/10">
       <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-        <H2 className="max-w-2xl">Sixteen verbs, one scope each.</H2>
-        <p className="font-mono text-sm text-white/50"><span className="text-accent">$</span> /rav quieter the pricing table</p>
+        <div>
+          <Kicker>/rav &lt;move&gt;</Kicker>
+          <H2 className="mt-5 max-w-2xl">Sixteen verbs, one scope each.</H2>
+        </div>
+        <Cmd sign="&gt;">/rav quieter the pricing table</Cmd>
       </div>
       <p className="mt-6 max-w-xl text-base leading-relaxed text-white/65 md:text-lg">Name the move and it stays inside it. Everything outside what you named is left exactly as it was.</p>
       <div className="mt-14"><Explorer /></div>
