@@ -46,7 +46,8 @@ body {
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
-  border-radius: 2px;
+  /* no border-radius here: it reshaped whatever was focused (a round handle
+     turned square). The outline follows each element's own shape. */
 }
 ::selection {
   background: var(--accent);

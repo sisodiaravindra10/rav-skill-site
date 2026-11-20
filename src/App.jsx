@@ -280,19 +280,24 @@ function MoveExplorer() {
         <div className="min-w-0">
           <div
             ref={paneRef}
-            className="relative h-60 min-w-0 select-none overflow-hidden rounded-xl border border-white/10 bg-black/40 sm:h-64"
+            className="relative h-60 min-w-0 cursor-ew-resize touch-none select-none overflow-hidden rounded-xl border border-white/10 bg-black/40 sm:h-64"
+            onPointerDown={(e) => {
+              dragging.current = true;
+              e.currentTarget.setPointerCapture?.(e.pointerId);
+              setFromPointer(e.clientX);
+            }}
           >
             <div
               key={m.verb + "-b"}
-              className="move-face absolute inset-y-0 left-0 flex items-center justify-center overflow-hidden px-5 py-9 grayscale"
-              style={{ width: `${split}%` }}
+              className="move-face absolute inset-0 flex items-center justify-center overflow-hidden px-5 py-9 grayscale"
+              style={{ clipPath: `inset(0 ${100 - split}% 0 0)` }}
             >
               {SPECIMENS[m.verb].was}
             </div>
             <div
               key={m.verb + "-a"}
-              className="move-face absolute inset-y-0 right-0 flex items-center justify-center overflow-hidden border-l border-white/5 bg-ink px-5 py-9"
-              style={{ width: `${100 - split}%` }}
+              className="move-face absolute inset-0 flex items-center justify-center overflow-hidden bg-ink px-5 py-9"
+              style={{ clipPath: `inset(0 0 0 ${split}%)` }}
             >
               {SPECIMENS[m.verb].now}
             </div>
@@ -309,10 +314,6 @@ function MoveExplorer() {
               aria-valuemin={8}
               aria-valuemax={92}
               aria-valuenow={Math.round(split)}
-              onPointerDown={(e) => {
-                dragging.current = true;
-                setFromPointer(e.clientX);
-              }}
               onKeyDown={(e) => {
                 const d = e.key === "ArrowRight" ? 4 : e.key === "ArrowLeft" ? -4 : 0;
                 if (!d) return;
@@ -320,7 +321,7 @@ function MoveExplorer() {
                 setSplit((v) => Math.min(92, Math.max(8, v + d)));
               }}
               style={{ left: `${split}%` }}
-              className="absolute top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize items-center justify-center rounded-full border border-accent/60 bg-ink text-accent"
+              className="absolute top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize items-center justify-center rounded-full border border-accent bg-ink text-accent shadow-[0_0_0_4px_rgba(11,11,12,0.7)] focus-visible:outline-offset-4"
             >
               <MoveHorizontal size={15} />
             </div>
