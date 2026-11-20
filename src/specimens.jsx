@@ -175,7 +175,7 @@ export const SPECIMENS = {
     ),
   },
   adapt: {
-    was: <div className="grid grid-cols-4 gap-1.5">{Array.from({length:8}).map((_,i)=><span key={i} className="h-6 w-8 rounded-sm bg-white/12" />)}</div>,
+    was: <Stack gap={5}><div className="grid grid-cols-4 gap-1.5">{Array.from({length:8}).map((_,i)=><span key={i} className="block h-6 w-8 rounded-sm bg-white/30" />)}</div><Label>4 cols at 375</Label></Stack>,
     now: (
       <Stack gap={5}>
         {Array.from({length:3}).map((_,i)=><span key={i} className="block h-6 w-[136px] rounded-sm bg-white/25" />)}

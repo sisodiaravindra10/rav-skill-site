@@ -2,7 +2,7 @@ import DuskSky from "./DuskSky.jsx";
 import HeroRaven from "./HeroRaven.jsx";
 import Below from "./Below.jsx";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Check, Copy, Menu, MoveHorizontal, X } from "lucide-react";
+import { ArrowRight, Check, Copy, Menu, X } from "lucide-react";
 import { SPECIMENS } from "./specimens.jsx";
 
 const REPO = "https://github.com/sisodiaravindra10/rav-skill";
@@ -202,90 +202,99 @@ function Nav({ mobileMenuOpen, setMobileMenuOpen }) {
   );
 }
 
+/* The moves, as something you run. Pick a verb and the raven flies the change
+   across the stage: the "was" example is wiped into the "now" one behind it.
+   Flip between the two with the switch, or run it again. */
+const GROUPS = ["refine", "enhance", "fix", "evaluate"];
 function MoveExplorer() {
   const [active, setActive] = useState(0);
-  const railRef = useRef(null);
+  const [phase, setPhase] = useState("now"); // which example is showing
+  const [run, setRun] = useState(0);         // bumps to replay the flight
+  const listRef = useRef(null);
   const m = MOVES[active];
 
-  // Arrow keys walk the rail, so the whole thing works without a pointer.
-  const onRailKey = (e) => {
-    const d = e.key === "ArrowDown" ? 1 : e.key === "ArrowUp" ? -1 : 0;
+  const pick = (i, focus = false) => {
+    setActive(i); setPhase("now"); setRun((r) => r + 1);
+    if (focus) listRef.current?.querySelectorAll("[role=option]")[i]?.focus();
+  };
+  const onKey = (e) => {
+    const d = e.key === "ArrowRight" || e.key === "ArrowDown" ? 1 : e.key === "ArrowLeft" || e.key === "ArrowUp" ? -1 : 0;
     if (!d) return;
     e.preventDefault();
-    const next = (active + d + MOVES.length) % MOVES.length;
-    setActive(next);
-    const el = railRef.current?.querySelectorAll("[role=option]")[next];
-    el?.focus();
+    pick((active + d + MOVES.length) % MOVES.length, true);
   };
 
   return (
-    <div className="grid gap-10 lg:grid-cols-[minmax(0,11rem)_minmax(0,1fr)] lg:gap-14">
-      {/* the rail: focus resolves by distance from the selection */}
-      <div
-        ref={railRef}
-        role="listbox"
-        aria-label="Moves"
-        tabIndex={-1}
-        onKeyDown={onRailKey}
-        className="move-rail flex gap-x-5 gap-y-1 overflow-x-auto pb-2 lg:block lg:overflow-visible lg:pb-0"
-      >
-        {MOVES.map((mv, i) => {
-          const d = Math.abs(i - active);
-          const on = i === active;
-          return (
-            <button
-              key={mv.verb}
-              role="option"
-              aria-selected={on}
-              onClick={() => setActive(i)}
-              style={{ "--d": d }}
-              className={`move-rail__item flex min-h-[44px] shrink-0 items-center whitespace-nowrap text-left font-mono transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] lg:block lg:min-h-0 lg:w-full lg:py-1 ${
-                on ? "text-accent" : "text-white/85 hover:text-white"
-              }`}
-            >
-              {mv.verb}
-            </button>
-          );
-        })}
+    <div className="grid gap-10 lg:grid-cols-[5fr_7fr] lg:gap-14">
+      {/* what you type, and the sixteen things you can type */}
+      <div>
+        <p className="flex flex-wrap items-baseline gap-x-3 font-mono text-2xl text-white/45 sm:text-3xl" aria-live="polite">
+          <span className="text-accent">&gt;</span>
+          <span>/rav</span>
+          <span key={m.verb} className="move-detail text-accent">{m.verb}</span>
+          <span aria-hidden="true" className="move-caret -ml-1 inline-block h-[1.05em] w-[0.5em] translate-y-[0.15em] bg-accent" />
+        </p>
+        <p key={m.verb + "-g"} className="move-detail mt-4 min-h-[3.25rem] max-w-md text-base leading-relaxed text-white/65 md:text-lg">{m.gloss}</p>
+
+        <div ref={listRef} role="listbox" aria-label="The sixteen moves" aria-orientation="horizontal" onKeyDown={onKey} className="mt-8 space-y-5">
+          {GROUPS.map((g) => (
+            <div key={g} className="grid grid-cols-[5.5rem_1fr] items-start gap-3">
+              <span className="pt-2.5 font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">{g}</span>
+              <div className="flex flex-wrap gap-2">
+                {MOVES.map((mv, i) => mv.group !== g ? null : (
+                  <button
+                    key={mv.verb} type="button" role="option" aria-selected={i === active} tabIndex={i === active ? 0 : -1}
+                    onClick={() => pick(i)}
+                    className={`min-h-[44px] rounded-lg border px-3.5 font-mono text-sm transition-colors ${i === active ? "border-accent bg-accent text-[#140803]" : "border-white/14 text-white/75 hover:border-white/40 hover:text-white"}`}
+                  >
+                    {mv.verb}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div className="grid min-w-0 gap-10 md:grid-cols-[minmax(0,17rem)_minmax(0,1fr)] md:gap-12">
-        {/* the detail, keyed so it re-enters on change */}
-        <div key={m.verb} className="move-detail min-w-0">
-          <p className="font-mono text-xs uppercase tracking-[0.16em] text-white/45">{m.group}</p>
-          <p className="mt-4 font-mono text-sm text-white/45">/rav</p>
-          <h3 className="font-mono text-3xl leading-none text-accent md:text-4xl">{m.verb}</h3>
-          <p className="mt-4 text-sm leading-relaxed text-white/60">{m.gloss}</p>
-          <p className="mt-5 flex flex-wrap items-center gap-2 text-xs text-white/45">
+      {/* the stage */}
+      <div className="min-w-0">
+        <div className="relative h-72 overflow-hidden rounded-xl border border-white/14 bg-black/40 sm:h-80">
+          <div key={m.verb + "-was"} className="move-face absolute inset-0 flex items-center justify-center px-6 pb-8 pt-16 grayscale">
+            <div className="sm:scale-150">{SPECIMENS[m.verb].was}</div>
+          </div>
+          {phase === "now" && (
+            <div key={m.verb + "-now-" + run} className="move-now absolute inset-0 flex items-center justify-center bg-ink px-6 pb-8 pt-16">
+              <div className="sm:scale-150">{SPECIMENS[m.verb].now}</div>
+            </div>
+          )}
+          {phase === "now" && (
+            <div key={"fly-" + run} aria-hidden="true" className="move-flyer pointer-events-none absolute inset-y-0 w-[3px] bg-accent">
+              <img src="/mascot/raven-fly-orange.svg" alt="" draggable={false} width="56" height="56" className="pixel absolute left-1/2 top-1/2 h-14 w-14 max-w-none -translate-x-1/2 -translate-y-1/2" />
+            </div>
+          )}
+
+          <div role="group" aria-label="Which example to show" className="absolute left-3 top-3 flex overflow-hidden rounded-lg border border-white/14 bg-[#0b0b0c]/90 font-mono text-[11px] uppercase tracking-[0.16em]">
+            <button type="button" aria-pressed={phase === "was"} onClick={() => setPhase("was")} className={`min-h-[44px] px-3 ${phase === "was" ? "bg-white/15 text-white" : "text-white/55 hover:text-white"}`}>Was</button>
+            <button type="button" aria-pressed={phase === "now"} onClick={() => { setPhase("now"); setRun((r) => r + 1); }} className={`min-h-[44px] px-3 ${phase === "now" ? "bg-accent text-[#140803]" : "text-white/55 hover:text-white"}`}>Now</button>
+          </div>
+          <button type="button" onClick={() => { setPhase("now"); setRun((r) => r + 1); }} className="absolute right-3 top-3 min-h-[44px] rounded-lg border border-white/14 bg-[#0b0b0c]/90 px-3 font-mono text-[11px] uppercase tracking-[0.16em] text-white/70 hover:text-white">
+            Run it again
+          </button>
+        </div>
+
+        <div key={m.verb + "-d"} className="move-detail mt-5">
+          <p className="text-base font-medium text-white md:text-lg">{m.caption}</p>
+          <div className="mt-4 space-y-1.5 border-l border-white/20 pl-4">
+            <code tabIndex={0} className="block overflow-x-auto whitespace-pre font-mono text-xs leading-6 text-white/45 line-through decoration-white/25 sm:text-[13px]">{m.before}</code>
+            <code tabIndex={0} className="block overflow-x-auto whitespace-pre font-mono text-xs leading-6 text-white/90 sm:text-[13px]">{m.after}</code>
+          </div>
+          <p className="mt-5 flex flex-wrap items-center gap-2 font-mono text-xs text-white/50">
             <span>combines with</span>
             {m.combines.map((c) => (
-              <button
-                key={c}
-                onClick={() => setActive(MOVES.findIndex((x) => x.verb === c))}
-                className="relative rounded border border-white/12 bg-white/[0.04] px-2 py-1 font-mono text-accent/80 transition-colors before:absolute before:-inset-y-2 before:-inset-x-1 before:content-[''] hover:border-white/25 hover:text-accent"
-              >
+              <button key={c} type="button" onClick={() => pick(MOVES.findIndex((x) => x.verb === c))} className="min-h-[44px] rounded-md border border-white/14 px-2.5 text-accent hover:border-accent">
                 /{c}
               </button>
             ))}
-          </p>
-        </div>
-
-        {/* was and now, side by side at full size, with the raven on the seam */}
-        <div className="min-w-0">
-          <div className="relative grid overflow-hidden rounded-xl border border-white/14 bg-black/40 sm:grid-cols-2">
-            <div key={m.verb + "-b"} className="move-face relative flex min-h-[13rem] items-center justify-center px-6 pb-10 pt-14 grayscale sm:min-h-[19rem]">
-              <span className="pointer-events-none absolute left-3 top-3 rounded bg-white/10 px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-white/75">Was</span>
-              <div className="sm:scale-110">{SPECIMENS[m.verb].was}</div>
-            </div>
-            <div key={m.verb + "-a"} className="move-face relative flex min-h-[13rem] items-center justify-center border-t-[3px] border-accent bg-ink px-6 pb-10 pt-14 sm:min-h-[19rem] sm:border-l-[3px] sm:border-t-0">
-              <span className="pointer-events-none absolute right-3 top-3 rounded bg-accent px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-[#140803]">Now</span>
-              <div className="sm:scale-110">{SPECIMENS[m.verb].now}</div>
-            </div>
-            <img src="/mascot/raven-tile.svg" alt="" aria-hidden="true" draggable={false} width="48" height="48"
-              className="pixel pointer-events-none absolute left-1/2 top-4 hidden h-11 w-11 -translate-x-1/2 rounded-lg shadow-[0_0_0_4px_rgba(11,11,12,0.8)] sm:block" />
-          </div>
-          <p key={m.verb + "-c"} className="move-detail mt-4 text-center text-xs text-white/50">
-            {m.caption}
           </p>
         </div>
       </div>

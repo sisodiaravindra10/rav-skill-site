@@ -204,7 +204,7 @@ function Compare() {
         role="slider" tabIndex={0} aria-label="Slide between the page without the skill and the page with rav"
         aria-valuemin={4} aria-valuemax={96} aria-valuenow={Math.round(split)}
         onKeyDown={(e) => { const d = e.key === "ArrowRight" ? 4 : e.key === "ArrowLeft" ? -4 : 0; if (!d) return; e.preventDefault(); setSplit((v) => Math.min(96, Math.max(4, v + d))); }}
-        className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 scale-[0.8] cursor-ew-resize rounded-lg shadow-[0_0_0_4px_rgba(11,11,12,0.75)] focus-visible:outline-offset-4 sm:scale-100"
+        className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 scale-[0.86] cursor-ew-resize rounded-lg shadow-[0_0_0_4px_rgba(11,11,12,0.75)] focus-visible:outline-offset-4 sm:scale-100"
         style={{ left: `${split}%` }}
       >
         <Px src="raven-tile" size={52} className="rounded-lg" />
@@ -216,8 +216,8 @@ function Compare() {
 
 function Proof({ repo }) {
   const tally = [
-    ["3", "0", "invented prices"],
-    ["3", "0", "invented contact facts", "a phone number, a street address, a founding year"],
+    ["3", "0", "Invented prices"],
+    ["3", "0", "Invented contact facts", "a phone number, a street address, a founding year"],
   ];
   return (
     <Wrap id="proof" className="border-t border-white/10">
@@ -233,26 +233,44 @@ function Proof({ repo }) {
 
       <div className="mt-12"><Compare /></div>
 
-      <ul className="mt-12 grid gap-x-10 gap-y-10 sm:grid-cols-3">
+      {/* What differs, read straight across: the fact, then each page's answer
+          under the same two labels the panel above uses. */}
+      <div className="mt-12" role="table" aria-label="What differs between the two pages">
+        <div role="row" className="hidden grid-cols-[1.3fr_1fr_1fr] gap-6 pb-3 sm:grid">
+          <span role="columnheader" aria-label="What was counted" />
+          <span role="columnheader"><span className="rounded bg-white/10 px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-white/75">Without the skill</span></span>
+          <span role="columnheader"><span className="rounded bg-accent px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-[#140803]">With rav</span></span>
+        </div>
         {tally.map(([a, b, label, note]) => (
-          <li key={label}>
-            <p className="flex items-baseline gap-3 font-pixel leading-none tabular-nums">
-              <span className="text-6xl text-white/50 line-through decoration-white/25 md:text-7xl">{a}</span>
-              <span aria-hidden="true" className="font-mono text-2xl text-white/50">→</span>
-              <span className="text-7xl text-accent md:text-8xl">{b}</span>
-            </p>
-            <p className="mt-3 text-base font-medium text-white">{label}</p>
-            {note && <p className="mt-1 text-sm text-white/55">{note}</p>}
-          </li>
+          <div key={label} role="row" className="grid grid-cols-2 items-center gap-x-6 gap-y-3 border-t border-white/12 py-6 sm:grid-cols-[1.3fr_1fr_1fr]">
+            <div role="rowheader" className="col-span-2 sm:col-span-1">
+              <p className="text-lg font-medium text-white md:text-xl">{label}</p>
+              {note && <p className="mt-1 text-sm text-white/55">{note}</p>}
+            </div>
+            <div role="cell">
+              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/50 sm:hidden">Without the skill</p>
+              <p className="font-pixel text-6xl leading-none text-white/70 tabular-nums md:text-7xl">{a}</p>
+            </div>
+            <div role="cell">
+              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-accent sm:hidden">With rav</p>
+              <p className="font-pixel text-6xl leading-none text-accent tabular-nums md:text-7xl">{b}</p>
+            </div>
+          </div>
         ))}
-        <li>
-          <p className="font-mono text-xs uppercase tracking-[0.16em] text-white/45">the look</p>
-          <p className="mt-3 text-base text-white/45 line-through decoration-white/25">Cream, serif italics, terracotta</p>
-          <p className="mt-1 text-base font-medium text-white">A cobalt field, a wide grotesk, one ochre accent</p>
-        </li>
-      </ul>
+        <div role="row" className="grid grid-cols-2 items-start gap-x-6 gap-y-3 border-y border-white/12 py-6 sm:grid-cols-[1.3fr_1fr_1fr]">
+          <div role="rowheader" className="col-span-2 sm:col-span-1"><p className="text-lg font-medium text-white md:text-xl">The look</p></div>
+          <div role="cell">
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/50 sm:hidden">Without the skill</p>
+            <p className="text-base leading-snug text-white/70 md:text-lg">Cream, serif italics, terracotta</p>
+          </div>
+          <div role="cell">
+            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-accent sm:hidden">With rav</p>
+            <p className="text-base font-medium leading-snug text-white md:text-lg">A cobalt field, a wide grotesk, one ochre accent</p>
+          </div>
+        </div>
+      </div>
 
-      <p className="mt-12 max-w-2xl border-t border-white/10 pt-6 text-sm leading-relaxed text-white/50">
+      <p className="mt-8 max-w-2xl text-sm leading-relaxed text-white/50">
         One run each, same model. Both pages are competent; this shows a narrow, checkable difference, not a verdict.{" "}
         <a href={`${repo}/tree/main/proof/kiln`} className="text-white/80 underline underline-offset-4 hover:text-white">Open both pages in the repo</a>.
       </p>
@@ -301,7 +319,6 @@ function Moves({ Explorer }) {
           <Kicker>/rav &lt;move&gt;</Kicker>
           <H2 className="mt-5 max-w-2xl">Sixteen verbs, one scope each.</H2>
         </div>
-        <Cmd sign="&gt;">/rav quieter the pricing table</Cmd>
       </div>
       <p className="mt-6 max-w-xl text-base leading-relaxed text-white/65 md:text-lg">Name the move and it stays inside it. Everything outside what you named is left exactly as it was.</p>
       <div className="mt-14"><Explorer /></div>
