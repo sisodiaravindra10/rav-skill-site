@@ -12,6 +12,13 @@ const NAV = [
 
 const INSTALL = "git clone https://github.com/sisodiaravindra10/rav-skill ~/.claude/skills/rav";
 
+const MADE_BY = [
+  { label: "Portfolio", href: "https://ravindra-siso.vercel.app/" },
+  { label: "Dribbble", href: "https://dribbble.com/sisodiaravindra" },
+  { label: "Behance", href: "https://www.behance.net/ravindrasisodia" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/ravindra-sisodia/" },
+];
+
 // What changed between v2.1 and v4.0. Each line is a file or section in the skill repo.
 const WHATS_NEW = [
   { title: "Questions before pixels",
@@ -620,7 +627,14 @@ export default function App() {
             <img src="/mascot/raven-sit-orange.svg" alt="" width="20" height="20" className="pixel h-5 w-5" />
             rav v4.0.0 . a design skill that learns your taste
           </span>
-          <span>Built with the skill it documents.</span>
+          <span className="flex flex-wrap items-center gap-x-5 gap-y-1">
+            <span>Made by Ravindra Sisodia</span>
+            {MADE_BY.map((l) => (
+              <a key={l.label} href={l.href} target="_blank" rel="noreferrer" className="inline-flex min-h-[44px] items-center text-white/70 underline-offset-4 transition-colors hover:text-white hover:underline">
+                {l.label}
+              </a>
+            ))}
+          </span>
         </div>
       </footer>
     </div>
