@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 
 /* Everything under the hero. The page keeps walking into the night after the
@@ -16,7 +17,7 @@ const H2 = ({ children, className = "" }) => (
   <h2 className={`text-4xl font-medium leading-[1.02] tracking-tight text-white sm:text-5xl lg:text-6xl ${className}`} style={{ textWrap: "balance" }}>{children}</h2>
 );
 const Px = ({ src, size, className = "" }) => (
-  <img src={`/mascot/${src}.svg`} alt="" aria-hidden="true" width={size} height={size} className={`pixel shrink-0 ${className}`} style={{ width: size, height: size }} />
+  <img src={`/mascot/${src}.svg`} alt="" aria-hidden="true" draggable={false} width={size} height={size} className={`pixel pointer-events-none shrink-0 ${className}`} style={{ width: size, height: size }} />
 );
 
 /* A band of ordered dither between two flat colours, drawn as an SVG pattern. */
@@ -160,41 +161,81 @@ function Flight() {
 }
 
 /* ── the proof ─────────────────────────────────────────────────────── */
+/* One frame, two pages. The divider wipes between them and the raven rides it. */
+function Compare() {
+  const [split, setSplit] = useState(50);
+  const pane = useRef(null), dragging = useRef(false);
+  const set = (x) => { const r = pane.current.getBoundingClientRect(); setSplit(Math.min(96, Math.max(4, ((x - r.left) / r.width) * 100))); };
+  return (
+    <div
+      ref={pane}
+      className="relative aspect-[16/10] w-full cursor-ew-resize touch-none select-none overflow-hidden rounded-xl border border-white/14 bg-black"
+      onPointerDown={(e) => { dragging.current = true; e.currentTarget.setPointerCapture?.(e.pointerId); set(e.clientX); }}
+      onPointerMove={(e) => dragging.current && set(e.clientX)}
+      onPointerUp={() => { dragging.current = false; }}
+      onPointerCancel={() => { dragging.current = false; }}
+      onDragStart={(e) => e.preventDefault()}
+    >
+      <img src="/kiln-with.png" alt="The page built with rav: a cobalt field, a wide grotesk headline and a rendered clay pot on a wheel." width="1200" height="750" draggable={false} className="pointer-events-none absolute inset-0 h-full w-full object-cover" />
+      <img src="/kiln-without.png" alt="The page built with no skill: a cream ground, serif italics and a terracotta accent, with prices shown." width="1200" height="750" draggable={false} className="pointer-events-none absolute inset-0 h-full w-full object-cover" style={{ clipPath: `inset(0 ${100 - split}% 0 0)` }} />
+
+      <span className="pointer-events-none absolute left-2 top-2 rounded bg-[#0b0b0c]/85 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-white/80 sm:left-3 sm:top-3 sm:px-2.5 sm:py-1.5 sm:text-[11px]">Without</span>
+      <span className="pointer-events-none absolute right-2 top-2 rounded bg-accent px-2 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-[#140803] sm:right-3 sm:top-3 sm:px-2.5 sm:py-1.5 sm:text-[11px]">With rav</span>
+
+      <div aria-hidden="true" className="pointer-events-none absolute inset-y-0 w-[3px] -translate-x-1/2 bg-accent" style={{ left: `${split}%` }} />
+      <div
+        role="slider" tabIndex={0} aria-label="Slide between the page without the skill and the page with rav"
+        aria-valuemin={4} aria-valuemax={96} aria-valuenow={Math.round(split)}
+        onKeyDown={(e) => { const d = e.key === "ArrowRight" ? 4 : e.key === "ArrowLeft" ? -4 : 0; if (!d) return; e.preventDefault(); setSplit((v) => Math.min(96, Math.max(4, v + d))); }}
+        className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 scale-[0.8] cursor-ew-resize rounded-lg shadow-[0_0_0_4px_rgba(11,11,12,0.75)] focus-visible:outline-offset-4 sm:scale-100"
+        style={{ left: `${split}%` }}
+      >
+        <Px src="raven-tile" size={52} className="rounded-lg" />
+      </div>
+      <span aria-hidden="true" className="pointer-events-none absolute bottom-3 left-1/2 hidden -translate-x-1/2 rounded bg-[#0b0b0c]/85 px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-white/70 sm:block">drag the raven</span>
+    </div>
+  );
+}
+
 function Proof({ repo }) {
-  const rows = [["look", "cream, serif italics, terracotta", "cobalt field, wide grotesk, one ochre accent"], ["invented prices", "3", "0"], ["invented phone, address, founding year", "all three", "none"]];
+  const tally = [
+    ["3", "0", "invented prices"],
+    ["3", "0", "invented contact facts", "a phone number, a street address, a founding year"],
+  ];
   return (
     <Wrap id="proof" className="border-t border-white/10">
-      <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-        <div className="max-w-2xl">
-          <H2>One prompt, with and without.</H2>
-          <p className="mt-5 font-mono text-xs leading-relaxed text-white/50 sm:text-sm">"landing page for Kiln, a small ceramics studio in Jaipur that sells handmade tableware online and runs weekend wheel-throwing classes."</p>
+      <div className="grid gap-10 lg:grid-cols-[5fr_7fr] lg:items-end lg:gap-20">
+        <div>
+          <Kicker>proof/kiln</Kicker>
+          <H2 className="mt-5">One prompt, with and without.</H2>
         </div>
-        <Px src="raven-fly-up-orange" size={84} className="hidden md:block" />
+        <p className="rounded-xl border border-white/12 bg-white/[0.03] px-5 py-4 font-mono text-xs leading-relaxed text-white/75 sm:text-sm">
+          <span className="text-accent">&gt;</span> landing page for Kiln, a small ceramics studio in Jaipur that sells handmade tableware online and runs weekend wheel-throwing classes.
+        </p>
       </div>
 
-      <div className="mt-12 grid gap-5 md:grid-cols-2">
-        {[["Without the skill", "/kiln-without.png", false, "The page built with no skill: a cream ground, serif italics and a terracotta accent, with prices shown."], ["With rav", "/kiln-with.png", true, "The page built with rav: a cobalt field, a wide grotesk headline and a rendered clay pot on a wheel."]].map(([label, src, hot, alt]) => (
-          <figure key={label} className={`overflow-hidden rounded-xl border ${hot ? "border-accent" : "border-white/14"}`}>
-            <figcaption className={`border-b border-white/12 px-4 py-3 font-mono text-[11px] uppercase tracking-[0.16em] ${hot ? "text-accent" : "text-white/50"}`}>{label}</figcaption>
-            <img src={src} alt={alt} width="1200" height="750" loading="lazy" className="block h-auto w-full" />
-          </figure>
+      <div className="mt-12"><Compare /></div>
+
+      <ul className="mt-12 grid gap-x-10 gap-y-10 sm:grid-cols-3">
+        {tally.map(([a, b, label, note]) => (
+          <li key={label}>
+            <p className="flex items-baseline gap-3 font-mono leading-none tracking-tight tabular-nums">
+              <span className="text-5xl text-white/50 line-through decoration-white/25 md:text-6xl">{a}</span>
+              <span aria-hidden="true" className="text-2xl text-white/50">→</span>
+              <span className="text-6xl text-accent md:text-7xl">{b}</span>
+            </p>
+            <p className="mt-3 text-base font-medium text-white">{label}</p>
+            {note && <p className="mt-1 text-sm text-white/55">{note}</p>}
+          </li>
         ))}
-      </div>
+        <li>
+          <p className="font-mono text-xs uppercase tracking-[0.16em] text-white/45">the look</p>
+          <p className="mt-3 text-base text-white/45 line-through decoration-white/25">Cream, serif italics, terracotta</p>
+          <p className="mt-1 text-base font-medium text-white">A cobalt field, a wide grotesk, one ochre accent</p>
+        </li>
+      </ul>
 
-      <div className="mt-10 overflow-x-auto" tabIndex={0} role="region" aria-label="Comparison of the two pages">
-        <table className="w-full min-w-[34rem] border-collapse text-left text-sm md:text-base">
-          <tbody>
-            {rows.map(([k, a, b]) => (
-              <tr key={k} className="border-t border-white/10">
-                <th scope="row" className="w-1/3 py-3.5 pr-4 font-mono text-xs font-normal text-white/45">{k}</th>
-                <td className="w-1/3 py-3.5 pr-4 text-white/70">{a}</td>
-                <td className="w-1/3 py-3.5 text-white">{b}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <p className="mt-6 max-w-2xl text-sm leading-relaxed text-white/50">
+      <p className="mt-12 max-w-2xl border-t border-white/10 pt-6 text-sm leading-relaxed text-white/50">
         One run each, same model. Both pages are competent; this shows a narrow, checkable difference, not a verdict.{" "}
         <a href={`${repo}/tree/main/proof/kiln`} className="text-white/80 underline underline-offset-4 hover:text-white">Open both pages in the repo</a>.
       </p>
