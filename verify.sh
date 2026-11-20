@@ -8,7 +8,7 @@ no(){ printf "  \033[31mFAIL\033[0m %s\n" "$1"; fail=$((fail+1)); }
 code(){ curl -s -o /dev/null -m 25 -w '%{http_code}' "$H$1"; }
 
 echo "▸ routes"
-for p in / /healthz /hero.mp4 /hero-poster.jpg; do
+for p in / /healthz /mascot/raven-tile.svg /og.png; do
   c=$(code "$p"); [ "$c" = "200" ] && ok "$p" || no "$p returned $c"
 done
 c=$(code /definitely-not-here); [ "$c" = "404" ] && ok "unknown path 404s" || no "unknown path returned $c"
@@ -23,8 +23,8 @@ done
 # shipped by looking inside the bundle rather than the document.
 BUNDLE=$(printf '%s' "$PAGE" | grep -o '/assets/[^"]*\.js' | head -1)
 JS=$(curl -s -m 30 "$H$BUNDLE")
-grep -q '"catches"' <<<"$JS" && ok "fold 2 in the bundle" || no "fold 2 missing from the bundle"
-grep -q '"run"'     <<<"$JS" && ok "fold 3 in the bundle" || no "fold 3 missing from the bundle"
+grep -q '"ask"' <<<"$JS" && ok "setup section in the bundle" || no "setup section missing from the bundle"
+grep -q '"proof"' <<<"$JS" && ok "proof section in the bundle" || no "proof section missing from the bundle"
 grep -q 'sixty-six production tells' <<<"$JS" && ok "hero copy is current" || no "hero copy is stale"
 
 echo "▸ things that quietly rot"

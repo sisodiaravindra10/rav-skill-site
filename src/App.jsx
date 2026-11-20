@@ -1,3 +1,6 @@
+import DuskSky from "./DuskSky.jsx";
+import HeroRaven from "./HeroRaven.jsx";
+import Below from "./Below.jsx";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check, Copy, Menu, MoveHorizontal, X } from "lucide-react";
 import { SPECIMENS } from "./specimens.jsx";
@@ -5,9 +8,9 @@ import { SPECIMENS } from "./specimens.jsx";
 const REPO = "https://github.com/sisodiaravindra10/rav-skill";
 
 const NAV = [
-  { label: "Evidence", href: "#catches" },
+  { label: "Setup", href: "#ask" },
+  { label: "Proof", href: "#proof" },
   { label: "Moves", href: "#run" },
-  { label: "Reference", href: `${REPO}/tree/main/reference` },
 ];
 
 const INSTALL = "git clone https://github.com/sisodiaravindra10/rav-skill ~/.claude/skills/rav";
@@ -19,21 +22,6 @@ const MADE_BY = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/ravindra-sisodia/" },
 ];
 
-// What changed between v2.1 and v4.0. Each line is a file or section in the skill repo.
-const WHATS_NEW = [
-  { title: "Questions before pixels",
-    body: "It reads the project first, then asks one short round about the goal, the audience and what is real before it designs anything." },
-  { title: "Your profile, in your words",
-    body: "Run /rav setup. Ten questions, one at a time, about how you start, how you choose and what you refuse. The answers outrank every rule here." },
-  { title: "A product-stage hero",
-    body: "The brand colour as a full field, the headline at real scale, and the real product shown large. The default for software pages." },
-  { title: "A checked font roster",
-    body: "Google Fonts sorted by the job each does, with Devanagari families, pairings and loading rules. Every name confirmed to load." },
-  { title: "A voice pass",
-    body: "Eighteen sentence shapes that mark copy as machine-written, each with its fix, run on every visible string." },
-  { title: "A micro-interaction floor",
-    body: "Press feedback, hover only where devices hover, popovers that grow from their trigger. Distilled from Emil Kowalski's design engineering skill." },
-];
 
 // Every pair below is a real edit from one audit in this repo's history, quoted
 // from the diff. Nothing here is illustrative.
@@ -366,13 +354,14 @@ function InstallLine({ className = "" }) {
   };
   return (
     <div
-      className={`flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-lg border border-white/15 bg-black/50 py-2 pl-4 pr-2 backdrop-blur-sm sm:w-fit ${className}`}
+      className={`flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-xl border border-accent bg-[#0b0b0c] py-2 pl-5 pr-2 shadow-[0_0_0_4px_rgba(245,133,73,0.14)] sm:w-fit ${className}`}
     >
+      <span aria-hidden="true" className="select-none font-mono text-sm font-medium text-accent sm:text-base">$</span>
       <code
         tabIndex={0}
         role="region"
         aria-label="Install command"
-        className="overflow-x-auto whitespace-nowrap rounded-sm font-mono text-xs text-white/80 sm:text-sm"
+        className="overflow-x-auto whitespace-nowrap rounded-sm font-mono text-sm text-white sm:text-base"
       >
         {INSTALL}
       </code>
@@ -380,9 +369,10 @@ function InstallLine({ className = "" }) {
         type="button"
         onClick={copy}
         aria-label={copied ? "Install command copied" : "Copy install command"}
-        className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-white/60 transition-colors before:absolute before:-inset-1 before:content-[''] hover:bg-white/10 hover:text-white"
+        className="relative flex h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-accent px-4 font-mono text-sm font-medium text-[#140803] hover:bg-[#ff9a63]"
       >
-        {copied ? <Check size={16} className="text-accent" /> : <Copy size={16} />}
+        {copied ? <Check size={16} /> : <Copy size={16} />}
+        <span className="hidden sm:inline">{copied ? "Copied" : "Copy"}</span>
       </button>
       <span aria-live="polite" className="sr-only">
         {copied ? "Copied" : ""}
@@ -393,25 +383,6 @@ function InstallLine({ className = "" }) {
 
 export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const videoRef = useRef(null);
-
-  useEffect(() => {
-    const v = videoRef.current;
-    if (!v) return;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => {
-      if (reduce.matches || document.hidden) v.pause();
-      else v.play().catch(() => {});
-    };
-    sync();
-    reduce.addEventListener("change", sync);
-    document.addEventListener("visibilitychange", sync);
-    return () => {
-      reduce.removeEventListener("change", sync);
-      document.removeEventListener("visibilitychange", sync);
-    };
-  }, []);
-
   useEffect(() => {
     const onKey = (e) => e.key === "Escape" && setMobileMenuOpen(false);
     document.addEventListener("keydown", onKey);
@@ -426,27 +397,10 @@ export default function App() {
     <div id="top" className="w-full bg-ink font-geist">
       {/* Fold 1: the film */}
       <section className="h-viewport relative flex w-full flex-col overflow-hidden">
-        <video
-          ref={videoRef}
-          className="absolute inset-0 h-full w-full object-cover [object-position:70%_center]"
-          src="/hero.mp4"
-          poster="/hero-poster.jpg"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          aria-hidden="true"
-        />
-
-        {/* One scrim, angled off the side the type sits on and tinted to the water
-            rather than flat black. Its stops are lengths, not percentages, so the
-            dark zone tracks the text column instead of the viewport. Measured
-            across all 11 sampled frames of the loop, nothing drops below AA. */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,10,16,0.86)_0%,rgba(4,10,16,0.74)_45%,rgba(4,10,16,0.80)_100%)] md:bg-[linear-gradient(100deg,rgba(4,10,16,0.93)_0px,rgba(4,10,16,0.87)_520px,rgba(4,10,16,0.64)_860px,rgba(4,10,16,0.10)_1400px)]"
-        />
+        {/* Dusk over Jodhpur, drawn in pixels. The light is low on the right, so
+            the type column sits in the dark half of the sky. */}
+        <DuskSky />
+        <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(0deg,rgba(11,11,12,0.9)_0%,rgba(11,11,12,0.78)_22%,rgba(11,11,12,0)_40%)] md:bg-[linear-gradient(90deg,rgba(11,11,12,0.55)_0%,rgba(11,11,12,0.25)_38%,rgba(11,11,12,0)_62%)]" />
 
         <Nav mobileMenuOpen={mobileMenuOpen} setMobileMenuOpen={setMobileMenuOpen} />
 
@@ -485,13 +439,13 @@ export default function App() {
           {...(mobileMenuOpen ? { inert: "" } : {})}
           className="relative z-10 flex min-h-0 flex-1 flex-col justify-between px-6 pb-10 pt-12 sm:pb-12 sm:pt-16 md:px-12 md:pb-16 md:pt-20 lg:px-16">
           {/* The mascot crosses the first screen once after load, then leaves. */}
-          <img src="/mascot/raven-fly-orange.svg" alt="" aria-hidden="true" className="raven-flight pixel" />
+          <HeroRaven />
           <div className="max-w-3xl">
             <p className="hero-reveal mb-4 animate-[fadeSlideUp_0.8s_cubic-bezier(0.16,1,0.3,1)_0.2s_both] text-xs text-white/90 sm:mb-6 sm:text-sm">
               A design skill for Claude Code
             </p>
             <h1 className="hero-reveal animate-[fadeSlideUp_0.8s_cubic-bezier(0.16,1,0.3,1)_0.4s_both] text-3xl font-medium leading-[1.1] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl">
-              A design skill
+              A design ski<span id="perch">ll</span>
               <br />
               that learns
               <br />
@@ -511,132 +465,7 @@ export default function App() {
         </main>
       </section>
 
-      {/* Fold 2: proof, not assertion. Each row is the tell, then the line that
-          shipped, then the line that replaced it. */}
-      <section
-        id="catches"
-        className="scroll-mt-4 border-t border-white/10 px-6 py-20 md:px-12 md:py-28 lg:px-16"
-      >
-        <div className="mx-auto max-w-6xl">
-          <div className="max-w-2xl">
-            <h2 className="text-2xl font-medium leading-[1.15] tracking-tight text-white sm:text-3xl md:text-4xl">
-              One audit, four defects,
-              <br />
-              quoted from the diff.
-            </h2>
-            <p className="mt-5 max-w-lg text-sm leading-relaxed text-white/60 md:text-base">
-              Run against a finished landing page that looked done. Every line below is
-              the real before and the real after.
-            </p>
-          </div>
-
-          <div className="mt-12 border-t border-white/10 md:mt-16">
-            {CAUGHT.map((c) => (
-              <article
-                key={c.tell}
-                className="grid gap-x-10 gap-y-5 border-b border-white/10 py-8 md:grid-cols-[minmax(0,17rem)_minmax(0,1fr)] md:py-10"
-              >
-                <div>
-                  <h3 className="font-mono text-xs uppercase tracking-[0.14em] text-accent">
-                    {c.tell}
-                  </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-white/60">{c.why}</p>
-                  <p className="mt-3 font-mono text-xs text-white/45">
-                    <span className="tabular-nums text-white/75">{c.metric}</span> {c.unit}
-                  </p>
-                </div>
-
-                <div className="min-w-0 space-y-2.5">
-                  <div className="flex min-w-0 gap-3 border-l border-white/25 pl-4">
-                    <span className="shrink-0 select-none font-mono text-xs leading-6 text-white/60">
-                      was
-                    </span>
-                    <code tabIndex={0} className="min-w-0 overflow-x-auto whitespace-pre font-mono text-xs leading-6 text-white/50 line-through decoration-white/25 sm:text-[13px]">
-                      {c.before}
-                    </code>
-                  </div>
-                  <div className="flex min-w-0 gap-3 border-l border-accent pl-4">
-                    <span className="shrink-0 select-none font-mono text-xs leading-6 text-accent">
-                      now
-                    </span>
-                    <code tabIndex={0} className="min-w-0 overflow-x-auto whitespace-pre font-mono text-xs leading-6 text-white/90 sm:text-[13px]">
-                      {c.after}
-                    </code>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Fold 3: the interface you actually type, then the door out. */}
-      <section
-        id="run"
-        className="scroll-mt-4 border-t border-white/10 px-6 py-20 md:px-12 md:py-28 lg:px-16"
-      >
-        <div className="mx-auto max-w-6xl">
-          <div className="max-w-2xl">
-            <h2 className="text-2xl font-medium leading-[1.15] tracking-tight text-white sm:text-3xl md:text-4xl">
-              Sixteen verbs,
-              <br />
-              one scope each.
-            </h2>
-            <p className="mt-5 max-w-lg text-sm leading-relaxed text-white/60 md:text-base">
-              Name the move and it stays inside it. Everything outside what you named is
-              left exactly as it was.
-            </p>
-          </div>
-
-          <p className="mt-8 font-mono text-xs text-white/45 sm:text-sm">
-            <span className="text-accent">$</span> /rav quieter the pricing table
-          </p>
-
-          <div className="mt-12 border-t border-white/10 pt-10">
-            <MoveExplorer />
-          </div>
-
-          <div className="mt-14 border-t border-white/10 pt-10">
-            <p className="font-mono text-xs uppercase tracking-[0.16em] text-accent">New in v4</p>
-            <ul className="mt-8 grid gap-x-12 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
-              {WHATS_NEW.map((n) => (
-                <li key={n.title}>
-                  <h3 className="text-base font-medium tracking-tight text-white">{n.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-white/60">{n.body}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="mt-14 flex flex-col items-start gap-4 border-t border-white/10 pt-10 sm:flex-row sm:items-center sm:justify-between">
-            <InstallLine />
-            <a
-              href={REPO}
-              className="inline-flex min-h-[44px] shrink-0 items-center gap-2 text-sm text-white/60 transition-colors hover:text-white"
-            >
-              Read the skill on GitHub
-              <ArrowRight size={16} />
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <footer className="border-t border-white/10 px-6 py-8 md:px-12 lg:px-16">
-        <div className="mx-auto flex max-w-6xl flex-col gap-2 text-xs text-white/55 sm:flex-row sm:items-center sm:justify-between">
-          <span className="flex items-center gap-3">
-            <img src="/mascot/raven-sit-orange.svg" alt="" width="20" height="20" className="pixel h-5 w-5" />
-            rav v4.0.0 . a design skill that learns your taste
-          </span>
-          <span className="flex flex-wrap items-center gap-x-5 gap-y-1">
-            <span>Made by Ravindra Sisodia</span>
-            {MADE_BY.map((l) => (
-              <a key={l.label} href={l.href} target="_blank" rel="noreferrer" className="inline-flex min-h-[44px] items-center text-white/70 underline-offset-4 transition-colors hover:text-white hover:underline">
-                {l.label}
-              </a>
-            ))}
-          </span>
-        </div>
-      </footer>
+      <Below Explorer={MoveExplorer} Install={InstallLine} caught={CAUGHT} repo={REPO} madeBy={MADE_BY} version="4.1.0" />
     </div>
   );
 }
