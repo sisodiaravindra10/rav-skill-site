@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
+import Scene from "./Pixel.jsx";
 
 /* Everything under the hero. The page keeps walking into the night after the
    dusk sky: ink ground, one orange accent, the raven turning up in each part,
@@ -29,25 +30,10 @@ const Cmd = ({ children, sign = "$", className = "" }) => (
 /* One large orange figure with its unit, as in the proof and the checker. */
 const Figure = ({ n, label, note }) => (
   <div>
-    <p className="font-mono text-6xl leading-none tracking-tight text-accent tabular-nums md:text-7xl">{n}</p>
+    <p className="font-pixel text-7xl leading-none text-accent tabular-nums md:text-8xl">{n}</p>
     <p className="mt-3 text-base font-medium text-white">{label}</p>
     {note && <p className="mt-1 text-sm text-white/55">{note}</p>}
   </div>
-);
-
-/* A band of ordered dither between two flat colours, drawn as an SVG pattern. */
-const Dither = ({ from, to, flip = false }) => (
-  <svg aria-hidden="true" className="pixel block h-6 w-full" preserveAspectRatio="none" style={{ background: from, transform: flip ? "scaleY(-1)" : undefined }}>
-    <defs>
-      <pattern id={`d1${flip ? "f" : ""}`} width="24" height="24" patternUnits="userSpaceOnUse">
-        <rect x="0" y="0" width="6" height="6" fill={to} />
-        <rect x="12" y="6" width="6" height="6" fill={to} />
-        <rect x="0" y="12" width="6" height="6" fill={to} /><rect x="12" y="12" width="6" height="6" fill={to} />
-        <rect x="6" y="18" width="6" height="6" fill={to} /><rect x="18" y="18" width="6" height="6" fill={to} /><rect x="0" y="18" width="6" height="6" fill={to} /><rect x="12" y="18" width="6" height="6" fill={to} />
-      </pattern>
-    </defs>
-    <rect width="100%" height="100%" fill={`url(#d1${flip ? "f" : ""})`} />
-  </svg>
 );
 
 /* ── the interview ─────────────────────────────────────────────────── */
@@ -117,6 +103,7 @@ function Layers() {
   const chips = ["SKILL.md", "world", "layouts", "fonts", "voice", "micro", "tells", "verify.mjs"];
   return (
     <Wrap id="layers" className="border-t border-white/10">
+      <Scene kind="moon" px={5} className="pointer-events-none absolute right-6 top-10 hidden h-40 w-40 md:block lg:right-16" />
       <div className="max-w-3xl">
         <Kicker>profile/ over reference/</Kicker>
         <H2 className="mt-5">Two layers. Yours wins.</H2>
@@ -124,27 +111,34 @@ function Layers() {
           Rules shared by everyone make pages everyone has seen. So the rules are the floor, and your own process sits on top of them.
         </p>
       </div>
-      <div className="mt-16">
-        <div className="relative z-10 rounded-2xl border border-accent bg-[#1d130e] p-7 md:w-[64%] md:p-10">
-          <Px src="raven-sit-orange" size={56} className="absolute -top-[53px] right-10" />
-          <div className="flex flex-wrap items-baseline justify-between gap-3">
-            <h3 className="text-2xl font-medium tracking-tight text-white md:text-3xl">Your profile</h3>
-            <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-accent">private, written by setup</span>
-          </div>
-          <p className="mt-3 text-base leading-relaxed text-white/70">Where your designs start, how you choose, what you refuse, your own defaults.</p>
-          <ul className="mt-5 flex flex-wrap gap-2">
-            {["profile/process.md", "profile/dna.md"].map((c) => <li key={c} className="rounded-md border border-accent/50 px-2.5 py-1 font-mono text-xs text-accent">{c}</li>)}
-          </ul>
+      <div className="mt-16 grid gap-6 lg:grid-cols-[5fr_7fr] lg:gap-10">
+        <div className="relative overflow-hidden rounded-xl border border-white/14">
+          <Scene kind="strata" className="h-72 w-full lg:h-full lg:min-h-[26rem]" />
+          <span className="absolute left-4 top-[34%] rounded bg-[#0b0b0c]/85 px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-accent">your profile</span>
+          <span className="absolute left-4 top-[70%] rounded bg-[#0b0b0c]/85 px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-white/75">the core</span>
         </div>
-        <div className="mt-4 rounded-2xl border border-white/12 bg-white/[0.03] p-7 md:-mt-10 md:ml-[16%] md:p-10 md:pt-20">
-          <div className="flex flex-wrap items-baseline justify-between gap-3">
-            <h3 className="text-2xl font-medium tracking-tight text-white md:text-3xl">The core</h3>
-            <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">shared, the floor</span>
+        <div className="mt-12 flex flex-col gap-4 lg:mt-0">
+          <div className="relative rounded-2xl border border-accent bg-[#1d130e] p-7 md:p-9">
+            <Px src="raven-sit-orange" size={56} className="absolute -top-[53px] right-10" />
+            <div className="flex flex-wrap items-baseline justify-between gap-3">
+              <h3 className="text-2xl font-medium tracking-tight text-white md:text-3xl">Your profile</h3>
+              <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-accent">private, written by setup</span>
+            </div>
+            <p className="mt-3 text-base leading-relaxed text-white/70">Where your designs start, how you choose, what you refuse, your own defaults. It sits on top, and it is the part people see.</p>
+            <ul className="mt-5 flex flex-wrap gap-2">
+              {["profile/process.md", "profile/dna.md"].map((c) => <li key={c} className="rounded-md border border-accent/50 px-2.5 py-1 font-mono text-xs text-accent">{c}</li>)}
+            </ul>
           </div>
-          <p className="mt-3 max-w-2xl text-base leading-relaxed text-white/60">Three laws, colour, type, layout, imagery, copy, motion, sixteen scoped moves, and a checker that runs.</p>
-          <ul className="mt-6 flex flex-wrap gap-2">
-            {chips.map((c) => <li key={c} className="rounded-md border border-white/12 px-2.5 py-1 font-mono text-xs text-white/70">{c}</li>)}
-          </ul>
+          <div className="flex-1 rounded-2xl border border-white/12 bg-[#0b0b0c]/70 p-7 md:p-9">
+            <div className="flex flex-wrap items-baseline justify-between gap-3">
+              <h3 className="text-2xl font-medium tracking-tight text-white md:text-3xl">The core</h3>
+              <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-white/45">shared, the floor</span>
+            </div>
+            <p className="mt-3 max-w-2xl text-base leading-relaxed text-white/60">Three laws, colour, type, layout, imagery, copy, motion, sixteen scoped moves, and a checker that runs. The bedrock everything stands on.</p>
+            <ul className="mt-6 flex flex-wrap gap-2">
+              {chips.map((c) => <li key={c} className="rounded-md border border-white/12 px-2.5 py-1 font-mono text-xs text-white/70">{c}</li>)}
+            </ul>
+          </div>
         </div>
       </div>
     </Wrap>
@@ -164,14 +158,15 @@ function Flight() {
     <Wrap id="flight" className="border-t border-white/10">
       <Kicker>a new build</Kicker>
       <H2 className="mt-5 max-w-3xl">What it does on a new page.</H2>
-      <ol className="relative mt-20 grid gap-10 md:grid-cols-5 md:gap-6">
-        <span aria-hidden="true" className="absolute left-[7px] top-2 h-[calc(100%-1rem)] w-[2px] bg-[repeating-linear-gradient(180deg,rgba(255,255,255,0.3)_0_6px,transparent_6px_12px)] md:left-0 md:top-[7px] md:h-[2px] md:w-full md:bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.3)_0_6px,transparent_6px_12px)]" />
+      <div className="relative mt-12 overflow-hidden rounded-xl border border-white/14">
+        <Scene kind="flight" className="h-44 w-full sm:h-56 md:h-64" />
+        <Px src="raven-fly-orange" size={64} className="absolute left-[70%] top-[10%] -translate-x-[10%]" />
+      </div>
+      <ol className="mt-8 grid gap-8 md:grid-cols-5 md:gap-0">
         {STEPS.map(([t, d], i) => {
           const hot = i === 3;
           return (
-            <li key={t} className="relative pl-9 md:pl-0 md:pt-10">
-              <span aria-hidden="true" className={`absolute left-0 top-1 block h-4 w-4 md:top-0 ${hot ? "bg-accent" : "bg-white/35"}`} />
-              {hot && <Px src="raven-fly-orange" size={60} className="absolute -top-[58px] left-[-12px] hidden md:block" />}
+            <li key={t} className={`border-l-2 pl-5 md:border-l-0 md:border-t-2 md:px-4 md:pt-5 md:text-center ${hot ? "border-accent" : "border-white/15"}`}>
               <h3 className={`text-xl font-medium tracking-tight md:text-2xl ${hot ? "text-accent" : "text-white"}`}>{t}</h3>
               <p className="mt-2 text-sm leading-relaxed text-white/60 md:text-base">{d}</p>
             </li>
@@ -241,10 +236,10 @@ function Proof({ repo }) {
       <ul className="mt-12 grid gap-x-10 gap-y-10 sm:grid-cols-3">
         {tally.map(([a, b, label, note]) => (
           <li key={label}>
-            <p className="flex items-baseline gap-3 font-mono leading-none tracking-tight tabular-nums">
-              <span className="text-5xl text-white/50 line-through decoration-white/25 md:text-6xl">{a}</span>
-              <span aria-hidden="true" className="text-2xl text-white/50">→</span>
-              <span className="text-6xl text-accent md:text-7xl">{b}</span>
+            <p className="flex items-baseline gap-3 font-pixel leading-none tabular-nums">
+              <span className="text-6xl text-white/50 line-through decoration-white/25 md:text-7xl">{a}</span>
+              <span aria-hidden="true" className="font-mono text-2xl text-white/50">→</span>
+              <span className="text-7xl text-accent md:text-8xl">{b}</span>
             </p>
             <p className="mt-3 text-base font-medium text-white">{label}</p>
             {note && <p className="mt-1 text-sm text-white/55">{note}</p>}
@@ -281,7 +276,7 @@ function Checker({ caught }) {
         <ul className="grid gap-x-10 gap-y-12 sm:grid-cols-2">
           {caught.map((c) => (
             <li key={c.tell}>
-              <p className="font-mono text-6xl leading-none tracking-tight text-accent tabular-nums md:text-7xl">{c.metric}</p>
+              <p className="font-pixel text-7xl leading-none text-accent tabular-nums md:text-8xl">{c.metric}</p>
               <p className="mt-2 font-mono text-xs text-white/45">{c.unit}</p>
               <h3 className="mt-5 text-lg font-medium tracking-tight text-white">{c.tell.charAt(0).toUpperCase() + c.tell.slice(1)}</h3>
               <p className="mt-2 text-sm leading-relaxed text-white/60">{c.why}</p>
@@ -318,7 +313,7 @@ function Moves({ Explorer }) {
 function Close({ Install, repo, madeBy }) {
   return (
     <>
-      <Dither from="#0b0b0c" to="#f58549" />
+      <Scene kind="dawn" className="h-44 w-full sm:h-56 md:h-72" />
       <section id="get" className="scroll-mt-16 bg-accent px-6 pb-20 pt-16 text-[#140803] md:px-12 md:pb-28 md:pt-24 lg:px-16">
         <div className="mx-auto max-w-6xl">
           <div className="flex flex-wrap items-end gap-x-10 gap-y-6">
@@ -352,12 +347,17 @@ function Close({ Install, repo, madeBy }) {
 export default function Below({ Explorer, Install, caught, repo, madeBy, version }) {
   return (
     <>
-      <Ask />
-      <Layers />
-      <Flight />
-      <Proof repo={repo} />
-      <Checker caught={caught} />
-      <Moves Explorer={Explorer} />
+      <div className="relative">
+        <Scene kind="night" className="pointer-events-none absolute inset-0 h-full w-full" />
+        <div className="relative">
+          <Ask />
+          <Layers />
+          <Flight />
+          <Proof repo={repo} />
+          <Checker caught={caught} />
+          <Moves Explorer={Explorer} />
+        </div>
+      </div>
       <Close Install={Install} repo={repo} madeBy={madeBy} />
       <footer className="bg-ink px-6 py-8 md:px-12 lg:px-16">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 text-xs text-white/55 sm:flex-row sm:items-center sm:justify-between">

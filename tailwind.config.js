@@ -5,6 +5,8 @@ export default {
     extend: {
       fontFamily: {
         geist: ["Geist", "sans-serif"],
+        // Figures only: the big numbers echo the hero's pixel grain.
+        pixel: ["Pixelify Sans", "Geist", "sans-serif"],
       },
       colors: {
         // The page's three real colours. Everything else is white at an alpha.
