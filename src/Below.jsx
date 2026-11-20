@@ -261,7 +261,7 @@ function Close({ Install, repo, madeBy }) {
           </div>
           <h2 className="mt-12 max-w-4xl text-4xl font-medium leading-[1.02] tracking-tight sm:text-5xl lg:text-6xl">A design skill that learns your taste.</h2>
           <div className="mt-10 flex flex-col items-start gap-5 lg:flex-row lg:items-center">
-            <div className="max-w-full rounded-xl bg-[#0b0b0c] px-4 py-2"><Install /></div>
+            <Install plain />
             <a href={repo} className="inline-flex min-h-[44px] items-center gap-2 text-base font-medium underline-offset-4 hover:underline">
               Read it on GitHub <ArrowRight size={18} />
             </a>

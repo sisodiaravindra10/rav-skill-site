@@ -342,7 +342,7 @@ function MoveExplorer() {
   );
 }
 
-function InstallLine({ className = "" }) {
+function InstallLine({ className = "", plain = false }) {
   const [copied, setCopied] = useState(false);
   const copy = async () => {
     try {
@@ -355,7 +355,7 @@ function InstallLine({ className = "" }) {
   };
   return (
     <div
-      className={`flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-xl border border-accent bg-[#0b0b0c] py-2 pl-5 pr-2 shadow-[0_0_0_4px_rgba(245,133,73,0.14)] sm:w-fit ${className}`}
+      className={`flex w-full min-w-0 items-center gap-3 overflow-hidden rounded-xl border bg-[#0b0b0c] py-2 pl-5 pr-2 sm:w-fit ${plain ? "border-[#0b0b0c]" : "border-accent shadow-[0_0_0_4px_rgba(245,133,73,0.14)]"} ${className}`}
     >
       <span aria-hidden="true" className="select-none font-mono text-sm font-medium text-accent sm:text-base">$</span>
       <code
